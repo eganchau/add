@@ -14,6 +14,41 @@
 			height: 50px;  
 			background-color: #e1017e;
 		}
+        header .left {
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            width: 90px;
+            height: 50px;
+        }
+        header .left .arrow-down {
+            position: absolute;
+            top: 21px;
+            left: 12px;
+            width: 13px;
+            height: 8px;
+            background-image: url(../image/arrow_down.png);
+            background-size: 13px 8px;
+            -webkit-transition: all 200ms;
+            transition: all 200ms;
+        }
+        
+        header .left .arrow-up {
+            -webkit-transform: rotate(-180deg);
+            transform: rotate(-180deg);
+        }
+        
+        header .left .city-text {
+            width: 100%;
+            box-sizing: border-box;
+            height: 14px;
+            padding-left: 28px;
+            padding-top: 18px;
+            line-height: 14px;
+            font-size: 14px;
+            text-align: left;
+            color: #fff;
+        }
 		header .center {
 			position: relative;  /*可变位置元素*/
 			width: 100%;
@@ -36,6 +71,7 @@
 </head>
 <body>
 	<header id="header">
+        <div class="left" tapmode onclick="fnOpenCitySelectorFrame()"></div>
 		<div class="center">加 减</div>
 		<div class="right" tapmode onclick="fnOpenPersonalCenter()"></div>
 	</header>	
@@ -46,7 +82,7 @@
 apiready = function(){
     var header = $api.byId("header");  //使用id获取变量值
     $api.fixStatusBar(header);  //使用沉浸式（消除状顶部态栏-）
-    var headerH = $api.offset(header).h;  //获取header的高度
+    headerH = $api.offset(header).h;  //获取header的高度
 
     api.openFrame({
         name: 'main_frame',
@@ -65,12 +101,32 @@ apiready = function(){
 }
 
 //
-
+var headerH;
+function fnOpenCitySelectorFrame() {
+    api.openFrame({
+        name: 'cityselector_frame',
+        url: './cityselector_frame.html',
+        rect: {
+            x: 0,
+            y: headerH,
+            w: 'auto',
+            h: 'auto'
+        },
+        pageParam: {
+            name: 'value'
+        },
+        bounces: true
+    });
+}
 //打开个人中心
 function fnOpenPersonalCenter() {
-	
-
-	
+	api.openWin({
+        name: 'personalcenter',
+        url: './personalcenter.html',
+        pageParam: {
+            name: 'value'
+        }
+    });
 }
     
 </script>

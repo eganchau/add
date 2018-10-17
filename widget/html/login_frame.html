@@ -93,6 +93,17 @@ function fnLogin() {
     var usernameValue = username.value;
     var passwordValue = password.value;
 
+    if (passwordValue.length ==0 || usernameValue.length == 0) {
+        alert('用户名密码不能为空')
+        return
+    }
+    if (usernameValue.length <= 3 || passwordValue.length < 6) {
+        alert('用户名称或密码长度不合！')
+        username.outerHTML = username.outerHTML;
+        password.outerHTML = password.outerHTML;
+        return
+    }
+
     api.ajax({
         url: 'https://d.apicloud.com/mcm/api/user/login',
         method: 'post',
@@ -116,12 +127,11 @@ function fnLogin() {
                 }
             });
         } else {
-            var body = JSON.stringify(err.body)
-            alert(body)
             var statusCode = JSON.stringify(err.statusCode)
             if (statusCode == 401) {
                 alert('账号或密码错！')
-                alert(JSON.stringify(err));
+                username.outerHTML = username.outerHTML;
+                password.outerHTML = password.outerHTML;
             } else {
                 alert(JSON.stringify(err));
             }
