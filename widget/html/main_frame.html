@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>main_frame</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+        body{
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="eqution">
+        <div class="number" id="number1">00</div>
+        <div id="symbl">+</div>
+        <div class="number" id="number2">0</div>
+        <div>=</div>    
+        <input class="number_result" id="number3" onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+    </div>
+    <div class="sumbit" tapmode="selected" onclick="fnJudgeResult()">提交答案</div>
+    <div class="sumbit2" tapmode="selected" onclick="fnReAmount()">重新开始</div>
+    <div class="result">
+        <div>正确数：</div><div id="goodResult">0</div>
+        <div>错误数：</div><div id="badResult">0</div>
+    </div>
+    <div class="mno_number">
+        <div>最大数：</div><input class="mn_number" id="maxNumber" value=20 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+        <div>最小数：</div><input class="mn_number" id="minNumber" value=0 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+    </div>
+    <div class="choice">
+        <input type="radio" id="addMinus" name="symbl" value='+-' checked="checked">加减法<br />
+        <input type="radio" id="add" name="symbl" value='+'>加法<br />
+        <input type="radio" id="minus" name="symbl" value='-'>减法<br />
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+apiready = function(){
+
+    fnCreateEqution();
+};
+
+//生成算式
+function fnCreateEqution() {
+    var symbl_arr = ['+', '-'];    
+
+    var symbl = $api.byId('symbl');
+    var number = fnNumber();
+    var number1 = number[0];
+    var number2 = number[1];
+    var symbl_add =$api.byId('add');
+    var symbl_minus = $api.byId('minus');
+    var symbl_addMinus = $api.byId('addMinus');
+
+    if (symbl_add.checked) {
+        symbl.innerHTML = '+';
+    }
+    if (symbl_addMinus.checked) {
+        var sy = symbl_arr[Math.floor(Math.random()*symbl_arr.length)];
+        symbl.innerHTML = sy;
+    }
+
+    if (symbl_minus.checked) {
+        symbl.innerHTML = '-';
+    }
+    var number3 = $api.byId('number3');
+    number3.outerHTML=number3.outerHTML;
+    number3.focus();
+}
+
+//生成数字1、数字2
+function fnNumber(){
+    var maxNumber = $api.byId('maxNumber');
+    var minNumber = $api.byId('minNumber');
+    var number1 = $api.byId('number1');
+    var i = fnCreateRandomNumber(minNumber.value,maxNumber.value);
+    number1.innerHTML = i;
+    var number2 = $api.byId('number2');
+    var j = fnCreateRandomNumber(minNumber.value,maxNumber.value);
+    number2.innerHTML = j;
+    
+    return [number1, number2]
+}
+
+//判断算式结果
+function fnJudgeResult(){
+    var symbl = $api.byId('symbl');//表面符号
+    var number1 = $api.byId('number1').innerHTML;
+    var number2 = $api.byId('number2').innerHTML;
+    if (symbl.innerHTML == '-') {
+        //置换大的数字在前
+        if (parseInt(number2.innerHTML) > parseInt(number1.innerHTML)) {
+            t = number1.innerHTML;
+            number1.innerHTML = number2.innerHTML;
+            number2.innerHTML = t;
+        }
+        var result = parseInt(number1) - parseInt(number2)
+    } else {
+        var result = parseInt(number1) + parseInt(number2)
+    }
+    
+    var number3 = $api.byId('number3');
+    var goodResult = $api.byId('goodResult');
+    var badResult = $api.byId('badResult');
+    if (number3.value == '') {
+        alert('答案为空！');
+        return;
+    }
+    
+    if(result == parseInt(number3.value)){
+        fnCreateEqution();
+        goodResult.innerHTML = parseInt(goodResult.innerHTML) + 1;
+        number3.focus();
+    } else {
+        alert('回答错误  >_<~!, 重新作答。');
+        badResult.innerHTML = parseInt(badResult.innerHTML) + 1;
+        number3.outerHTML=number3.outerHTML; //清空文本框
+        number3.focus();
+    }
+}
+
+//重新计算按钮函数
+function fnReAmount() {
+    fnCreateEqution();
+    var goodResult = $api.byId('goodResult');
+    var badResult = $api.byId('badResult');
+    goodResult.innerHTML = 0;
+    badResult.innerHTML = 0;
+}
+
+//生成大于0的范围随机数字
+function fnCreateRandomNumber(start, end) {
+    for(var i=0; i<10; i++) {
+        var length = end - start;
+        var num = parseInt(Math.random() * (length) + start);
+        if (num>0){
+            break
+        }
+    }
+    return num
+}
+</script>
+</html>

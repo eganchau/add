@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>main</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<style>
+		header {
+			display: block;   /*块级元素*/
+			position: relative;  /*位置*/
+			width: 100%;
+			height: 50px;  
+			background-color: #e1017e;
+		}
+		header .center {
+			position: relative;  /*可变位置元素*/
+			width: 100%;
+			height: 50px;
+			font-size: 30px; color: #fff; text-align:center; 
+		}
+		header .right{
+			position: absolute;  /*固定位置元素*/
+			bottom: 0;
+			right: 0;
+			width: 40px;
+			height: 50px;
+
+			background: url(../image/home_membercenter.png);
+			background-size: 30px 30px;
+			background-position: center center;
+			background-repeat: no-repeat;
+		}
+	</style>
+</head>
+<body>
+	<header id="header">
+		<div class="center">加 减</div>
+		<div class="right" tapmode onclick="fnOpenPersonalCenter()"></div>
+	</header>	
+</body>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+apiready = function(){
+    var header = $api.byId("header");  //使用id获取变量值
+    $api.fixStatusBar(header);  //使用沉浸式（消除状顶部态栏-）
+    var headerH = $api.offset(header).h;  //获取header的高度
+
+    api.openFrame({
+        name: 'main_frame',
+        url: './main_frame.html',
+        rect: {
+            x: 0,
+            y: headerH,
+            w: 'auto',
+            h: 'auto'
+        },
+        pageParam: {
+            name: 'value'
+        },
+        bounces: true
+    });
+}
+
+//
+
+//打开个人中心
+function fnOpenPersonalCenter() {
+	
+
+	
+}
+    
+</script>
+</html>
