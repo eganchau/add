@@ -2,9 +2,9 @@
 <widget id="A0000000000001"  version="0.0.1">
     <name>add</name>
     <description>
-        Example For APICloud.
+        dev by egan to apicloud.
     </description>
-    <author email="developer@apicloud.com" href="http://www.apicloud.com">
+    <author email="240449548@qq.com" href="http://www.apicloud.com">
         Developer
     </author>
     <content src="index.html" />
