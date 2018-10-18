@@ -53,6 +53,7 @@
     <div class="row">
         <input id="password" class="input" type="password" placeholder="密码">
     </div>
+    <div id="errText"></div>
     <div class="btn" tapmode onclick="fnRegister();">注册</div>
 
 </body>
@@ -67,6 +68,8 @@ function fnRegister() {
     var password = $api.byId('password');
     var usernameValue = username.value;
     var passwordValue = password.value;
+    var errText = $api.byId('errText');
+
 
     if (passwordValue.length ==0 || usernameValue.length == 0) {
         alert('用户名密码不能为空')
@@ -93,23 +96,24 @@ function fnRegister() {
             },
         }
     }, function(ret, err) {
-        var retStatusCode = JSON.stringify(ret.error.statusCode)
-        if (ret) {            
-            if (retStatusCode == 202) {
-                alert('用户名重复');
-                username.outerHTML = username.outerHTML;
-            } else {
-                var retUserName = JSON.stringify(ret.username)
+        try {
+            if(JSON.stringify(ret.error.statusCode)!=undefined){
+                 var retStatusCode = JSON.stringify(ret.error.statusCode);
+                 if (retStatusCode == 202) {
+                    alert('用户名重复');
+                    username.outerHTML = username.outerHTML;
+                }
+                
+            }else{
+               var retUserName = JSON.stringify(ret.username)
                 if (retUserName == usernameValue) {alert('用户名获取成功');}
                 alert('用户'+usernameValue+'注册成功！')
                 api.closeWin();
             }
-            //alert(JSON.stringify(ret)); 
-        } else {
-            alert(JSON.stringify(err));
+        } catch(error){
+            errText.text=error
         }
     });
 }
 </script>
-
 </html>
