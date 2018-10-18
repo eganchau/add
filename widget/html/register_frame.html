@@ -97,20 +97,20 @@ function fnRegister() {
         }
     }, function(ret, err) {
         try {
-            if(JSON.stringify(ret.error.statusCode)!=undefined){
-                 var retStatusCode = JSON.stringify(ret.error.statusCode);
-                 if (retStatusCode == 202) {
+            if (ret) {
+                if(JSON.stringify(ret.error.statusCode)!=undefined){
                     alert('用户名重复');
                     username.outerHTML = username.outerHTML;
-                }
-                
-            }else{
-               var retUserName = JSON.stringify(ret.username)
-                if (retUserName == usernameValue) {alert('用户名获取成功');}
-                alert('用户'+usernameValue+'注册成功！')
-                api.closeWin();
+                } 
+                //alert(JSON.stringify(ret));  //ret分支
+            } else {
+                alert(JSON.stringify(err)); //err分支
             }
         } catch(error){
+            if (JSON.stringify(ret.username) != undefined) {
+                alert('用户'+usernameValue+'注册成功！');
+                api.closeWin();
+            }
             errText.text=error
         }
     });

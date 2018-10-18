@@ -16,6 +16,7 @@
 		}
         header .left {
             position: absolute;
+            z-index: 2;
             left: 0px;
             bottom: 0px;
             width: 90px;
@@ -40,6 +41,7 @@
         
         header .left .city-text {
             width: 100%;
+            
             box-sizing: border-box;
             height: 14px;
             padding-left: 28px;
@@ -71,7 +73,10 @@
 </head>
 <body>
 	<header id="header">
-        <div class="left" tapmode onclick="fnOpenCitySelectorFrame()"></div>
+        <div class="left" tapmode onclick="fnOpenCitySelectorFrame()">
+            <div id="cityArrow" class="arrow-down"></div>
+            <div id="cityText" class="city-text">广州市</div>
+        </div>
 		<div class="center">加 减</div>
 		<div class="right" tapmode onclick="fnOpenPersonalCenter()"></div>
 	</header>	
@@ -83,6 +88,15 @@ apiready = function(){
     var header = $api.byId("header");  //使用id获取变量值
     $api.fixStatusBar(header);  //使用沉浸式（消除状顶部态栏-）
     headerH = $api.offset(header).h;  //获取header的高度
+
+    //接收login_frame的传参
+    var userId = api.pageParam.userId;
+    var ttl = api.pageParam.ttl;
+    var id = api.pageParam.id;
+    //console每次只能输入一个参数?
+    console.log(userId, ttl, id);
+    console.log(ttl, id);
+    console.log(id);
 
     api.openFrame({
         name: 'main_frame',
@@ -100,7 +114,6 @@ apiready = function(){
     });
 }
 
-//
 var headerH;
 function fnOpenCitySelectorFrame() {
     api.openFrame({

@@ -97,7 +97,7 @@ function fnLogin() {
         alert('用户名密码不能为空')
         return
     }
-    if (usernameValue.length <= 3 || passwordValue.length < 6) {
+    if (usernameValue.length < 1 || passwordValue.length < 1) {
         alert('用户名称或密码长度不合！')
         username.outerHTML = username.outerHTML;
         password.outerHTML = password.outerHTML;
@@ -119,11 +119,18 @@ function fnLogin() {
         }
     }, function(ret, err) {
         if (ret) {
+            //alert(JSON.stringify(ret));
+            var ttl = JSON.stringify(ret.ttl);   //登录状态保持时间
+            var id = JSON.stringify(ret.id);  //登录的id
+            var userId = JSON.stringify(ret.userId);  //user id 即数据库中的id
             api.openWin({
                 name: 'main',
                 url: './main.html',
                 pageParam: {
-                    isLogin: true
+                    //传参数到main页面
+                    ttl:ttl,
+                    id:id,
+                    userId:userId 
                 }
             });
         } else {
