@@ -14,12 +14,11 @@
 <script type="text/javascript" src="./script/api.js"></script>
 <script type="text/javascript">
 apiready = function(){
-    var isLogin = false;  //硬编码测试用
-    
-    if (isLogin == false) {
+    var userInfo = $api.getStorage('userInfo');
+    if (userInfo && userInfo.id) {
         api.openWin({
-            name: 'login',
-            url: './html/login.html',
+            name: 'main',
+            url: './html/main.html',
             slidBackEnabled: false, //禁止ios滑动退出应用
             pageParam: {
                 name: 'value'
@@ -27,8 +26,9 @@ apiready = function(){
         });
     } else {
         api.openWin({
-            name: 'main',
-            url: './html/main.html',
+            
+            name: 'login',
+            url: './html/login.html',
             slidBackEnabled: false, //禁止ios滑动退出应用
             pageParam: {
                 name: 'add'
