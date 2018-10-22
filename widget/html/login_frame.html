@@ -87,11 +87,14 @@
 apiready = function() {
 
 };
+
 function fnLogin() {
     var username = $api.byId('username');
     var password = $api.byId('password');
-    var usernameValue = username.value;
-    var passwordValue = password.value;
+    var usernameValue = username.value; //获取input框的value值 
+    var passwordValue = password.value; 
+
+
 
     if (passwordValue.length ==0 || usernameValue.length == 0) {
         alert('用户名密码不能为空')
@@ -118,28 +121,29 @@ function fnLogin() {
             }
         }
     }, function(ret, err) {
-        if (ret) {
-            //alert(JSON.stringify(ret));
-            var ttl = JSON.stringify(ret.ttl);   //登录状态保持时间
-            var id = JSON.stringify(ret.id);  //登录的id
-            var userId = JSON.stringify(ret.userId);  //user id 即数据库中的id
+        if (ret && ret.userId) {
             api.openWin({
                 name: 'main',
                 url: './main.html',
                 pageParam: {
                     //传参数到main页面
-                    ttl:ttl,
-                    id:id,
-                    userId:userId 
+                    ttl:ret.ttl,
+                    id:ret.id,
+                    userId:ret.userId 
                 }
             });
         } else {
-            var statusCode = JSON.stringify(err.statusCode)
-            if (statusCode == 401) {
+            console.log(err.statusCode)
+            //var statusCode = JSON.stringify(err.statusCode)
+            if (err.statusCode == 401) {
                 alert('账号或密码错！')
-                username.outerHTML = username.outerHTML;
-                password.outerHTML = password.outerHTML;
+                username.outerHTML = username.outerHTML;  //原生js清空输入框
+                //password.outerHTML = password.outerHTML;  //清空密码
+                var p = $api.byId('password');  //获取密码框对象 
+                $api.val(p, '');   //api.val(le, 'val')：只有arg1时返回le的value；有arg2时: arg2设置为le的新value值;
+
             } else {
+                console.log('Unknow Error!',err.value)
                 alert(JSON.stringify(err));
             }
             
