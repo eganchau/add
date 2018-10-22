@@ -58,8 +58,6 @@
     </header>
     <section id="list">
         <div class="city" tapmode onclick="api.closeFrame();">广州</div>
-        <div class="city">天津</div>
-        <div class="city">西安</div>
     </section>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
@@ -70,7 +68,7 @@ apiready = function() {
 
 function fnGitCityList() {
     var params = {  //根据文档构造参数
-        fields: {},  
+        fields: {},  //设置过虑的数据库字段如：code:false;
         where: {},   //过虑条件
         skip: 0,   //页数
         limit: 5  //城市数量
@@ -87,8 +85,7 @@ function fnGitCityList() {
         }        
     },function(ret, err){
         if (ret) {
-            console.log($api.jsonToStr(ret))
-            alert( JSON.stringify( ret ) );
+            //ret做为参数，返回给一个func
         } else {
             console.log($api.jsonToStr(err))
             alert( JSON.stringify( err ) );
