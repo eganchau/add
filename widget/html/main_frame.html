@@ -2,37 +2,165 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width,initial-scale=1.0"/>
     <title>main_frame</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <style>
+        html,
         body{
-            
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-flex-flow: column;
+            flex-flow: column;
+            height: 100%;
+        }
+        body .eqution {
+            position: relative;
+            top: 10px;
+            left: 0px;
+            float: left;
+            font-size: 55px;
+            padding: 10px 0px 10px 12px;
+            background-color: #cc66ff;
+            border-radius: 15px 15px 15px 15px;
+        }
+        body .eqution div { 
+            display:inline-block;
+            width: 15%;
+            height: 125px;
+            background: yellow;
+            text-align: center;
+            line-height: 120px;
+            border-radius:8px 8px 8px 8px;
+        }
+        body .eqution input {
+            width: 80%;
+            height: 110px;
+            border: 1px;
+            border-color: red;
+        }
+
+        body .result {
+            position: relative;
+            top: 20px;
+            left: 0px;
+            float: left;
+            font-size: 25px;color:#fff;
+            padding: 10px 0px 10px 12px;
+            background-color: #cc66ff;
+            border-radius: 15px 15px 15px 15px;
+        }
+        body .result div { 
+            display:inline-block;
+            width: 44%;
+            height: 50px;
+            background: #993399;
+            text-align: center;
+            line-height: 40px;
+            border-radius:8px 8px 8px 8px;
+        }
+
+        body .mno_number {
+            position: relative;
+            top: 30px;
+            left: 0px;
+            float: left;
+            font-size: 25px;color:#fff;
+            padding: 10px 0px 10px 12px;
+            background-color: #cc66ff;
+            border-radius: 15px 15px 15px 15px;
+        }
+        body .mno_number div { 
+            display:inline-block;
+            width: 44%;
+            height: 50px;
+            background: #993399;
+            text-align: center;
+            line-height: 40px;
+            border-radius:8px 8px 8px 8px;
+        }
+        body .mno_number input {
+            width: 50%;
+        }
+
+        body .choice {
+            position: relative;
+            top: 60px;
+            left: 0px;
+            float: left;
+            font-size: 25px;color:#fff;
+            padding: 10px 0px 10px 12px;
+            background-color: #cc66ff;
+            border-radius: 15px 15px 15px 15px;
+        }
+        body .choice input { 
+            display:inline-block;
+            width: 10%;
+            height: 20px;
+            background: #993399;
+            text-align: center;
+            line-height: 30px;
+            border-radius:8px 8px 8px 8px;
+        }
+
+        body .submit {
+            position: absolute;
+            width:100%;
+            bottom: 10px;
+            left: 0px;
+            float: left;
+            font-size: 42px;
+            padding: 10px 0px 10px 17px;
+            background-color: #cc66ff;
+            border-radius: 15px 15px 15px 15px;
+        }
+        body .submit div { 
+            display:inline-block;
+            width: 47%;
+            height: 60px;
+            background: red;
+            text-align: center;
+            line-height: 70px; 
+            border-radius:8px 8px 8px 8px;
         }
     </style>
 </head>
 <body>
     <div class="eqution">
-        <div class="number" id="number1">00</div>
-        <div id="symbl">+</div>
-        <div class="number" id="number2">0</div>
-        <div>=</div>    
-        <input class="number_result" id="number3" onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+        <div class="number_1" id="number1">00</div>
+        <div class="symbl1" id="symbl">+</div>
+        <div class="number_2" id="number2">0</div>
+        <div class="symbl2">=</div>
+        <div>
+            <input class="number_result" id="number3" onkeyup="value=value.replace(/[^\d]/g,'')"></input>    
+        </div> 
     </div>
-    <div class="sumbit" tapmode="selected" onclick="fnJudgeResult()">提交答案</div>
-    <div class="sumbit2" tapmode="selected" onclick="fnReAmount()">重新开始</div>
     <div class="result">
         <div>正确数：</div><div id="goodResult">0</div>
         <div>错误数：</div><div id="badResult">0</div>
     </div>
     <div class="mno_number">
-        <div>最大数：</div><input class="mn_number" id="maxNumber" value=20 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
-        <div>最小数：</div><input class="mn_number" id="minNumber" value=0 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+        <div>最大数：</div>
+        <div>
+            <input class="mn_number" id="maxNumber" value=20 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+        </div>
+        <div>最小数：</div>
+        <div>
+            <input class="mn_number" id="minNumber" value=0 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+        </div>        
     </div>
+    
     <div class="choice">
         <input type="radio" id="addMinus" name="symbl" value='+-' checked="checked">加减法<br />
         <input type="radio" id="add" name="symbl" value='+'>加法<br />
         <input type="radio" id="minus" name="symbl" value='-'>减法<br />
+    </div>
+
+    <div class="submit">
+        <div tapmode="selected" onclick="fnJudgeResult()">提交答案</div>
+        <div tapmode="selected" onclick="fnReAmount()">重新出题</div>
     </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
@@ -50,6 +178,14 @@ function fnCreateEqution() {
     var number = fnNumber();
     var number1 = number[0];
     var number2 = number[1];
+    console.log(parseInt(number2.value));
+    console.log(typeof parseInt(number2));
+    if (number2 > number2) {
+            console.log('change');
+            t = number1;
+            number1 = number2;
+            number2 = t;
+        }
     var symbl_add =$api.byId('add');
     var symbl_minus = $api.byId('minus');
     var symbl_addMinus = $api.byId('addMinus');
@@ -89,7 +225,9 @@ function fnJudgeResult(){
     var symbl = $api.byId('symbl');//表面符号
     var number1 = $api.byId('number1').innerHTML;
     var number2 = $api.byId('number2').innerHTML;
+    console.log(symbl.innerHTML)
     if (symbl.innerHTML == '-') {
+        console.log('- 法');
         //置换大的数字在前
         if (parseInt(number2.innerHTML) > parseInt(number1.innerHTML)) {
             t = number1.innerHTML;
