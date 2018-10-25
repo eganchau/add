@@ -132,6 +132,9 @@ function fnLogin() {
             });
         } else {
             console.log(err.statusCode)
+            if (err.statusCode == 0) {
+                alert('连接不到服务器, 请检查网络；')
+            }
             //var statusCode = JSON.stringify(err.statusCode)
             if (err.statusCode == 401) {
                 alert('账号或密码错！')
@@ -140,11 +143,9 @@ function fnLogin() {
                 var p = $api.byId('password');  //获取密码框对象 
                 $api.val(p, '');   //api.val(le, 'val')：只有arg1时返回le的value；有arg2时: arg2设置为le的新value值;
 
-            } else {
-                console.log('Unknow Error!',err.value)
-                alert(JSON.stringify(err));
-            }
-            
+            } 
+            console.log('Unknow Error!')
+            alert(JSON.stringify(err));  
         }
     }); 
 }
