@@ -112,7 +112,7 @@
 <body>
     <header id="header">
         <div class="back" tapmode onclick="api.closeWin();"></div>
-        <div class="exit" tapmode onclick="fnExitApp();"></div>
+        <div class="exit" tapmode onclick="fnLogout();"></div>
     </header>
     <section></section>
     <footer id="footer">
@@ -151,19 +151,28 @@ apiready = function() {
     });
 };
 
-function fnExitApp() {
+
+//登出函数
+function fnLogout() {
     api.confirm({
         title: '提示',
         msg: '是否退出？将清除userInfo信息',
         buttons: ['确定', '取消']
     }, function(ret, err) {
         if (ret.buttonIndex == 1) {
-            $api.setStorage("userInfo", '');
-            api.closeWidget();  //关闭应用
+            $api.clearStorage(); // 清除登录数据 或：$api.setStorage("userInfo", '');
+            setTimeout("api.closeWidget();", 2000);  //延时关闭应用
         }
     });
-    
+    //发送loginout事件
+    api.sendEvent({
+        name: 'loginout',
+        extra: {
+            msg: '登出成功'
+        }
+    });
 }
+
 </script>
 
 </html>
