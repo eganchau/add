@@ -104,11 +104,11 @@
 		<div class="right" tapmode onclick="fnOpenPersonalCenter()"></div>
 	</header>
     <nav id="nav">
-        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(0)">加减法</div>
-        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(1)">计时测试</div>
-        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(2)">英语</div>
-        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(3)">商城</div>
-        <div class='menu' tapmode="selected" onclick="fnSetNavMenuIndex(4)">资讯</div>
+        <div class="menu selected" tapmode="selected" onclick="fnSetNavMenuIndex(0);">加减法</div>
+        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(1);">计时测试</div>
+        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(2);">英语</div>
+        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(3);">商城</div>
+        <div class='menu' tapmode="selected" onclick="fnSetNavMenuIndex(4);">资讯</div>
     </nav>
 </body>
 
@@ -138,7 +138,7 @@ apiready = function(){
     //打开frame组
     api.openFrameGroup ({
         name: 'mainFrameGroup',
-        background: '#fff',
+        //background: '#fff',
         scrollEnabled: true,   //左右滑动frame页面
         rect: {
              x: 0, 
@@ -148,19 +148,10 @@ apiready = function(){
         },
         index: 0,  //默认打开第x frame页面
         frames: frameList//调用列表变量
-        // frames: [{
-        //     name: 'add_frame', 
-        //     url: './add_frame.html',
-        //     bgColor: '#fff'
-        // },{
-        //     name: 'frame2', 
-        //     url: 'frame2.html', 
-        //     bgColor: '#fff'
-        // }]
     }, function(ret, err){
         if( ret ){
              //ret={"index":1, "name":"frame2"}
-             //console.log(ret.index)
+             fnSetNavMenuSelected(ret.index);
         }
     });
 }
@@ -175,8 +166,8 @@ function fnSetNavMenuIndex(index_) {
     });
 }
 
-var menus;  //调用全局变量
 //滑动选择切换frame
+var menus;  //调用全局变量
 function fnSetNavMenuSelected(index_) {
     for(var i=0; i<menus.length; i++) {
         //判断传入的index_是否等于i
@@ -222,14 +213,6 @@ function fnInitEventListenner() {
                 api.closeWidget();  //关闭应用
             }
         });
-    });
-
-    //监听网络状态
-    api.addEventListener({
-        name: 'offline'
-    }, function(ret, err){
-        alert('网络已断开');
-
     });
 }
 
