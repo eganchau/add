@@ -19,18 +19,25 @@
         }
 
         body .eqution {
-            position: relative;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+            -webkit-flex-flow: row;  /*流式：即顺序排列*/
+            flex-flow: row;
+            position: relative;  /*非固定元素*/
+
             top: 5px;
-            left: 1px;
-            float: left;            
-            padding: 10px 0px 10px 12px;
-            background-color: #cc66ff;
+            width: 100%;
+            height: auto;
+            background-color: #993399;
             border-radius: 15px 15px 15px 15px;
         }
         body .eqution div { 
-            position: relative;
-            left: 0;
-            display:inline-block;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+
             width: 15%;
             height: 85px;
             background: yellow;
@@ -48,21 +55,29 @@
         }
 
         body .mno_number {
-            position: relative;
-            top: 8px;
-            left: 1px;
-            float: left;            
-            padding: 10px 0px 10px 12px;
-            background-color: #cc66ff;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+            -webkit-flex-flow: row;  /*流式：即顺序排列*/
+            flex-flow: row;
+            position: relative;  /*非固定元素*/
+            top:10px;
+            width: 100%;
+            height: auto;
+            background-color: #993399;
             border-radius: 15px 15px 15px 15px;
         }
         body .mno_number div { 
-            display:inline-block;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+
             width: 44%;
             height: 50px;
             background: #993399;
             margin: 1px 3px;
-            font-size: 25px;color:#fff;
+            font-size: 26px;color:#ffff;
             text-align: center;
             line-height: 40px;
             border-radius:8px 8px 8px 8px;
@@ -71,22 +86,30 @@
             width: 80%;
             height: auto;
             border: 1px;
-            border-color: red;
+            border-color: #fff;
         }
 
         body .choice {
-            position: relative;
-            top: 11px;
-            left: 1px;
-            float: left;
-            font-size: 20px;color:#fff;
-            padding: 10px 0px 10px 12px;
-            background-color: #cc66ff;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+            -webkit-flex-flow: row;  /*流式：即顺序排列*/
+            flex-flow: row;
+            position: relative;  /*非固定元素*/
+            font-size: 15px;color:#fff;
+            top:15px;
+            width: 100%;
+            height: auto;
+            background-color: #993399;
             border-radius: 15px 15px 15px 15px;
         }
         body .choice div { 
-            display:inline-block;
-            width: 25%;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+
+            
             height: 20px;
             margin:10px;
             background: #993399;
@@ -96,52 +119,60 @@
         }
 
         body .result {
-            position: relative;
-            top: 14px;
-            left: 1px;
-            float: left;            
-            padding: 10px 0px 10px 12px;
-            background-color: #cc66ff;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+            -webkit-flex-flow: row;  /*流式：即顺序排列*/
+            flex-flow: row;
+            position: relative;  /*非固定元素*/
+            top:20px;
+            width: 100%;
+            height: auto;
+            background-color: #993399;
             border-radius: 15px 15px 15px 15px;
         }
         body .result div { 
-            display:inline-block;
-            width: 44%;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+
+            width: 15%;
             height: 50px;
             background: #993399;
             margin: 1px 3px;
-            font-size: 25px;color:#fff;
+            font-size: 21px;color:#fff;
             text-align: center;
             line-height: 40px;
             border-radius:8px 8px 8px 8px;
         }
 
-
-
-
-
         body .submit {
-            position: absolute;
-            width:95%;
-            bottom: 10px;
-            left: 1px;
-            float: left;
-            font-size: 35px;
-            padding: 10px 0px 10px 17px;
-            background-color: #cc66ff;
-            border-radius: 15px 15px 15px 15px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+            -webkit-flex-flow: row;  /*流式：即顺序排列*/
+            flex-flow: row;
+            position: absolute;  /*非固定元素*/
+            bottom: 0px;
+            width: 100%;
+            height: auto;
+
         }
         body .submit div { 
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
 
-            left: 0;
-            display:inline-block;
+            font-size: 25px;color:#fff;
             width: 40%;
             height: 60px;
             margin: 0 10px;
             background: red;
             text-align: center;
             line-height: 70px; 
-            border-radius:8px 8px 8px 8px;
+            border-radius:15px 15px 15px 15px;
         }
     </style>
 </head>
@@ -157,11 +188,11 @@
     </div>
 
     <div class="mno_number">
-        <div>最大数：</div>
+        <div>最大：</div>
         <div>
             <input class="mn_number" id="maxNumber" value=20 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
         </div>
-        <div>最小数：</div>
+        <div>最小：</div>
         <div>
             <input class="mn_number" id="minNumber" value=0 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
         </div>        
