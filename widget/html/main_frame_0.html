@@ -44,7 +44,7 @@
             margin: 5px 5px;
             font-size: 55px;
             text-align: center;
-            line-height: 80px;
+            line-height: 85px;
             border-radius:8px 8px 8px 8px;
         }
         body .eqution input {
@@ -190,11 +190,11 @@
     <div class="mno_number">
         <div>最大：</div>
         <div>
-            <input class="mn_number" id="maxNumber" pattern="[0-9]" type='tel' max="99" value=20 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+            <input class="mn_number" id="maxNumber" pattern="[0-9]" type='text' maxlength="2" value=20 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
         </div>
         <div>最小：</div>
         <div>
-            <input class="mn_number" id="minNumber" pattern="[0-9]" type='tel' max="97" value=0 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+            <input class="mn_number" id="minNumber" pattern="[0-9]" type='text' maxlength="2" value=0 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
         </div>        
     </div>
 
@@ -228,6 +228,8 @@ apiready = function(){
 
     fnCreateEqution();
 };
+
+//监听输入框
 
 //生成算式
 function fnCreateEqution() {
@@ -274,9 +276,9 @@ function fnJudgeResult(){
     var symbl = $api.byId('symbl');//表面符号
     var number1 = $api.byId('number1').innerHTML;
     var number2 = $api.byId('number2').innerHTML;
-    console.log(symbl.innerHTML)
+    //console.log(symbl.innerHTML)
     if (symbl.innerHTML == '-') {
-        console.log('- 法');
+        //console.log('- 法');
         var result = parseInt(number1) - parseInt(number2)
     } else {
         var result = parseInt(number1) + parseInt(number2)
