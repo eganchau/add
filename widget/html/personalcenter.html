@@ -152,8 +152,17 @@ apiready = function() {
 };
 
 function fnExitApp() {
-    $api.setStorage("userInfo", '');  //清空用户资料
-    api.closeWidget();
+    api.confirm({
+        title: '提示',
+        msg: '是否退出？将清除userInfo信息',
+        buttons: ['确定', '取消']
+    }, function(ret, err) {
+        if (ret.buttonIndex == 1) {
+            $api.setStorage("userInfo", '');
+            api.closeWidget();  //关闭应用
+        }
+    });
+    
 }
 </script>
 
