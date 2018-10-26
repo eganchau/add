@@ -183,18 +183,18 @@
         <div class="number_2" id="number2">0</div>
         <div class="symbl2">=</div>
         <div>
-            <input class="number_result" id="number3" onkeyup="value=value.replace(/[^\d]/g,'')"></input>    
+            <input class="number_result" id="number3" pattern="[0-9]" type='tel' onkeyup="value=value.replace(/[^\d]/g,'')"></input>    
         </div> 
     </div>
 
     <div class="mno_number">
         <div>最大：</div>
         <div>
-            <input class="mn_number" id="maxNumber" value=20 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+            <input class="mn_number" id="maxNumber" pattern="[0-9]" type='tel' max="99" value=20 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
         </div>
         <div>最小：</div>
         <div>
-            <input class="mn_number" id="minNumber" value=0 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+            <input class="mn_number" id="minNumber" pattern="[0-9]" type='tel' max="97" value=0 onkeyup="value=value.replace(/[^\d]/g,'')"></input>
         </div>        
     </div>
 
@@ -265,7 +265,7 @@ function fnCreateEqution() {
     }
     var number3 = $api.byId('number3');
     number3.outerHTML=number3.outerHTML;
-    number3.focus();
+    // number3.val.focus();
 }
 
 
