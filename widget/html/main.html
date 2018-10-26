@@ -149,9 +149,8 @@ apiready = function(){
         index: 0,  //默认打开第x frame页面
         frames: frameList//调用列表变量
     }, function(ret, err){
-        if( ret ){
-             //ret={"index":1, "name":"frame2"}
-             fnSetNavMenuSelected(ret.index);
+        if( ret ){  //ret={"index":1, "name":"frame2"}             
+             fnSetNavMenuSelected(ret.index); //根据index变更nav的样式
         }
     });
 }
