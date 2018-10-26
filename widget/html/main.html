@@ -146,7 +146,7 @@ apiready = function(){
              w: 'auto', 
              h: 'auto'
         },
-        index: 0,  //默认打开第x frame页面
+        index: 1,  //默认打开第x frame页面
         frames: frameList//调用列表变量
         // frames: [{
         //     name: 'add_frame', 
@@ -160,25 +160,32 @@ apiready = function(){
     }, function(ret, err){
         if( ret ){
              //ret={"index":1, "name":"frame2"}
-             fnSetNavMenuIndex(ret.index);
+             console.log(ret.index)
         }
     });
+}
 
-    //单独的frame样式
-    // api.openFrame({
-    //     name: 'main_frame',
-    //     url: './main_frame.html',
-    //     rect: {
-    //         x: 0,
-    //         y: headerH + navH,
-    //         w: 'auto',
-    //         h: 'auto'
-    //     },
-    //     pageParam: {
-    //         name: 'value'
-    //     },
-    //     bounces: false  //不能上下拖动
-    // });
+//点击菜单切换frame
+function fnSetNavMenuIndex(index_) {
+    fnSetNavMenuSelected(index_);  //提前调用滑动的fn 达到优化点击的效果
+    api.setFrameGroupIndex({
+        name: 'mainFrameGroup',
+        index: index_,
+        scroll: true
+    });
+}
+
+var menus;  //调用全局变量
+//滑动选择切换frame
+function fnSetNavMenuSelected(index_) {
+    for(var i=0; i<menus.length; i++) {
+        //判断传入的index_是否等于i
+        if (index_ == i) {
+            $api.addCls(menus[i], 'selected');
+        } else {
+            $api.removeCls(menus[i], 'selected');
+        }
+    }
 }
 
 var headerH;
@@ -217,28 +224,7 @@ function fnInitEventListenner() {
     });
 }
 
-//点击菜单切换frame
-function fnSetNavMenuIndex(index_) {
-    fnSetNavMenuSelected(index_);  //提前调用滑动的fn 达到优化点击的效果
-    api.setFrameGroupIndex({
-        name: 'mainFrameGroup',
-        index: index_,
-        scroll: true
-    });
-}
 
-var menus;  //调用全局变量
-//滑动选择切换frame
-function fnSetNavMenuSelected(index_) {
-    for(var i=0; i<menus.length; i++) {
-        //判断传入的index_是否等于i
-        if (index_ == i) {
-            $api.addCls(menus[i], 'selected');
-        } else {
-            $api.removeCls(menus[i], 'selected');
-        }
-    }
-}
 
 //打开个人中心
 function fnOpenPersonalCenter() {
