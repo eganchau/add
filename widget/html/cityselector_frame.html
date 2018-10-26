@@ -11,12 +11,12 @@
     html,
     body {
         height: 100%;
-        background-color: rgba(0,0,0,0.7);
+        background-color: rgba(0,0,0,0.4);
     }
     
     header {
         width: 100%;
-        height: 96px;R
+        height: 96px;
     }
     
     header .title {
@@ -63,35 +63,13 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 apiready = function() {
-    fnGitCityList();
+    fnGetCityList();
 };
 
-function fnGitCityList() {
-    var params = {  //根据文档构造参数
-        fields: {},  //设置过虑的数据库字段如：code:false;
-        where: {},   //过虑条件
-        skip: 0,   //页数
-        limit: 5  //城市数量
-    }
-    params = $api.jsonToStr(params);  //对象转换成json
-
-    //获取数据请求
-    api.ajax({
-        url: 'http://d.apicloud.com/mcm/api/city?filter=' + params,
-        method: 'get',
-        headers: {
-            "X-APICloud-AppId": "A6084933293707",
-            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
-        }        
-    },function(ret, err){
-        if (ret) {
-            //ret做为参数，返回给一个func
-        } else {
-            console.log($api.jsonToStr(err))
-            alert( JSON.stringify( err ) );
-        }
-    });
+function fnGetCityList() {
+    ;
 }
+
 </script>
 
 </html>
