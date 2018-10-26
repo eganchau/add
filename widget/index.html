@@ -15,7 +15,7 @@
 <script type="text/javascript">
 apiready = function(){
 
-    fnGetCityList();
+    var cityList = fnGetCityList();
 
     var userInfo = $api.getStorage('userInfo');
     if (userInfo && userInfo.id) {
@@ -24,7 +24,7 @@ apiready = function(){
             url: './html/main.html',
             slidBackEnabled: false, //禁止ios滑动退出应用
             pageParam: {
-                name: 'value'
+                cityList_: cityList
             }
         });
     } else {
@@ -60,6 +60,7 @@ function fnGetCityList() {
         if (ret) {
             //ret做为参数，返回给一个func
             console.log($api.jsonToStr(ret));  //console.log不能直接输出对象,需要转化为str
+            return ret
         } else {
             console.log($api.jsonToStr(err))
             alert( JSON.stringify( err ) );
