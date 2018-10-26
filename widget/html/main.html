@@ -12,7 +12,7 @@
 			position: relative;  /*位置*/
 			width: 100%;
 			height: 50px;  
-			background-color: #e1017e;
+			background-color: #C71585;
 		}
         header .left {
             position: absolute;
@@ -67,6 +67,31 @@
 			background-position: center center;
 			background-repeat: no-repeat;
 		}
+        nav {
+            /*通过以下三句display声明nav为弹性盒子元素*/
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+            -webkit-flex-flow: row;  /*流式：即顺序排列*/
+            flex-flow: row;
+            position: relative;  /*非固定元素*/
+            width: 100%;
+            height: 40px;
+            background-color: #C71585;
+        }
+        nav .menu{
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+            width: 100%;
+            height: 40px;
+            font-size: 13px; color: #f973b8; text-align: center;
+        }
+        /*选中样式*/
+        nav .menu.selected {
+            font-size: 15px; color: #fff; font-weight: bolder;
+        }
 	</style>
 </head>
 <body>
@@ -75,9 +100,16 @@
             <div id="cityArrow" class="arrow-down"></div>
             <div id="cityText" class="city-text">广州</div>
         </div>
-		<div class="center">加 减</div>
+		<div class="center">app技术杂货铺</div>
 		<div class="right" tapmode onclick="fnOpenPersonalCenter()"></div>
-	</header>	
+	</header>
+    <nav id="nav">
+        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(0)">加减法</div>
+        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(1)">乘除法</div>
+        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(2)">英语</div>
+        <div class="menu" tapmode="selected" onclick="fnSetNavMenuIndex(3)">商城</div>
+        <div class='menu' tapmode="selected" onclick="fnSetNavMenuIndex(4)">资讯</div>
+    </nav>
 </body>
 
 <script type="text/javascript" src="../script/api.js"></script>
@@ -85,25 +117,68 @@
 apiready = function(){
 
     fnInitEventListenner();  //初始化事件监听器（监听退出）
-
+    //变量
     var header = $api.byId("header");  //使用id获取变量值
+    var nav =$api.byId('nav');
     $api.fixStatusBar(header);  //使用沉浸式（消除状顶部态栏-）
+    var navH = $api.offset(nav).h;
+    //全局变量
     headerH = $api.offset(header).h;  //获取header的高度
+    menus = $api.domAll(nav, '.menu'); //dom元素选择器; arg1: 父元素 arg2: 选择器
+    
+    //循环生成frames列表 
+    var frameList = [];  //列表类型  
+    for (var i=0; i<menus.length; i++) {
+        frameList.push({
+            name: 'main_frame_' + i,
+            url: './main_frame_'+ i +'.html',
+        });
+    }
 
-    api.openFrame({
-        name: 'main_frame',
-        url: './main_frame.html',
+    //打开frame组
+    api.openFrameGroup ({
+        name: 'mainFrameGroup',
+        background: '#fff',
+        scrollEnabled: true,   //左右滑动frame页面
         rect: {
-            x: 0,
-            y: headerH,
-            w: 'auto',
-            h: 'auto'
+             x: 0, 
+             y: headerH + navH, 
+             w: 'auto', 
+             h: 'auto'
         },
-        pageParam: {
-            name: 'value'
-        },
-        bounces: false  //不能上下拖动
+        index: 0,  //默认打开第x frame页面
+        frames: frameList//调用列表变量
+        // frames: [{
+        //     name: 'add_frame', 
+        //     url: './add_frame.html',
+        //     bgColor: '#fff'
+        // },{
+        //     name: 'frame2', 
+        //     url: 'frame2.html', 
+        //     bgColor: '#fff'
+        // }]
+    }, function(ret, err){
+        if( ret ){
+             //ret={"index":1, "name":"frame2"}
+             fnSetNavMenuIndex(ret.index);
+        }
     });
+
+    //单独的frame样式
+    // api.openFrame({
+    //     name: 'main_frame',
+    //     url: './main_frame.html',
+    //     rect: {
+    //         x: 0,
+    //         y: headerH + navH,
+    //         w: 'auto',
+    //         h: 'auto'
+    //     },
+    //     pageParam: {
+    //         name: 'value'
+    //     },
+    //     bounces: false  //不能上下拖动
+    // });
 }
 
 var headerH;
@@ -141,6 +216,30 @@ function fnInitEventListenner() {
         });
     });
 }
+
+//点击菜单切换frame
+function fnSetNavMenuIndex(index_) {
+    fnSetNavMenuSelected(index_);  //提前调用滑动的fn 达到优化点击的效果
+    api.setFrameGroupIndex({
+        name: 'mainFrameGroup',
+        index: index_,
+        scroll: true
+    });
+}
+
+var menus;  //调用全局变量
+//滑动选择切换frame
+function fnSetNavMenuSelected(index_) {
+    for(var i=0; i<menus.length; i++) {
+        //判断传入的index_是否等于i
+        if (index_ == i) {
+            $api.addCls(menus[i], 'selected');
+        } else {
+            $api.removeCls(menus[i], 'selected');
+        }
+    }
+}
+
 //打开个人中心
 function fnOpenPersonalCenter() {
 	api.openWin({
