@@ -15,59 +15,12 @@
             -webkit-flex-flow: column;
             flex-flow: column;
             height: 100%;
-            width: 99%;
-        }
-        body .choice {
-            position: relative;
-            top: 8px;
-            left: 1px;
-            float: left;
-            font-size: 20px;color:#fff;
-            padding: 10px 0px 10px 12px;
-            background-color: #cc66ff;
-            border-radius: 15px 15px 15px 15px;
-        }
-        body .choice div { 
-            display:inline-block;
-            width: 25%;
-            height: 20px;
-            margin:10px;
-            background: #993399;
-            text-align: center;
-            line-height: 18px;
-            border-radius:8px 8px 8px 8px;
-        }
-
-        body .mno_number {
-            position: relative;
-            top: 11px;
-            left: 1px;
-            float: left;            
-            padding: 10px 0px 10px 12px;
-            background-color: #cc66ff;
-            border-radius: 15px 15px 15px 15px;
-        }
-        body .mno_number div { 
-            display:inline-block;
-            width: 44%;
-            height: 50px;
-            background: #993399;
-            margin: 1px 3px;
-            font-size: 25px;color:#fff;
-            text-align: center;
-            line-height: 40px;
-            border-radius:8px 8px 8px 8px;
-        }
-        body .mno_number input {
-            width: 80%;
-            height: auto;
-            border: 1px;
-            border-color: red;
+            width: 100%;
         }
 
         body .eqution {
             position: relative;
-            top: 14px;
+            top: 5px;
             left: 1px;
             float: left;            
             padding: 10px 0px 10px 12px;
@@ -94,9 +47,57 @@
             border-color: red;
         }
 
+        body .mno_number {
+            position: relative;
+            top: 8px;
+            left: 1px;
+            float: left;            
+            padding: 10px 0px 10px 12px;
+            background-color: #cc66ff;
+            border-radius: 15px 15px 15px 15px;
+        }
+        body .mno_number div { 
+            display:inline-block;
+            width: 44%;
+            height: 50px;
+            background: #993399;
+            margin: 1px 3px;
+            font-size: 25px;color:#fff;
+            text-align: center;
+            line-height: 40px;
+            border-radius:8px 8px 8px 8px;
+        }
+        body .mno_number input {
+            width: 80%;
+            height: auto;
+            border: 1px;
+            border-color: red;
+        }
+
+        body .choice {
+            position: relative;
+            top: 11px;
+            left: 1px;
+            float: left;
+            font-size: 20px;color:#fff;
+            padding: 10px 0px 10px 12px;
+            background-color: #cc66ff;
+            border-radius: 15px 15px 15px 15px;
+        }
+        body .choice div { 
+            display:inline-block;
+            width: 25%;
+            height: 20px;
+            margin:10px;
+            background: #993399;
+            text-align: center;
+            line-height: 18px;
+            border-radius:8px 8px 8px 8px;
+        }
+
         body .result {
             position: relative;
-            top: 17px;
+            top: 14px;
             left: 1px;
             float: left;            
             padding: 10px 0px 10px 12px;
@@ -145,17 +146,16 @@
     </style>
 </head>
 <body>
-    <div class="choice">
+    <div class="eqution">
+        <div class="number_1" id="number1">00</div>
+        <div class="symbl1" id="symbl">+</div>
+        <div class="number_2" id="number2">0</div>
+        <div class="symbl2">=</div>
         <div>
-            <input type="radio" id="addMinus" name="symbl" value='+-' checked="checked">加减法<br />
-        </div>
-        <div>
-            <input type="radio" id="add" name="symbl" value='+'>加法<br />
-        </div>
-        <div>
-            <input type="radio" id="minus" name="symbl" value='-'>减法<br />
-        </div>   
+            <input class="number_result" id="number3" onkeyup="value=value.replace(/[^\d]/g,'')"></input>    
+        </div> 
     </div>
+
     <div class="mno_number">
         <div>最大数：</div>
         <div>
@@ -167,15 +167,18 @@
         </div>        
     </div>
 
-    <div class="eqution">
-        <div class="number_1" id="number1">00</div>
-        <div class="symbl1" id="symbl">+</div>
-        <div class="number_2" id="number2">0</div>
-        <div class="symbl2">=</div>
+    <div class="choice">
         <div>
-            <input class="number_result" id="number3" onkeyup="value=value.replace(/[^\d]/g,'')"></input>    
-        </div> 
+            <input type="radio" id="addMinus" name="symbl" value='+-' checked="checked">加减法<br />
+        </div>
+        <div>
+            <input type="radio" id="add" name="symbl" value='+'>加法<br />
+        </div>
+        <div>
+            <input type="radio" id="minus" name="symbl" value='-'>减法<br />
+        </div>   
     </div>
+
     <div class="result">
         <div>正确数：</div><div id="goodResult">0</div>
         <div>错误数：</div><div id="badResult">0</div>
