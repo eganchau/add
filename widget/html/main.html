@@ -146,7 +146,7 @@ apiready = function(){
              w: 'auto', 
              h: 'auto'
         },
-        index: 1,  //默认打开第x frame页面
+        index: 0,  //默认打开第x frame页面
         frames: frameList//调用列表变量
         // frames: [{
         //     name: 'add_frame', 
@@ -207,8 +207,9 @@ function fnOpenCitySelectorFrame() {
     $api.addCls($api.byId('cityArrow'), 'arrow-up');  //修改前头样式
 }
 
-//监听退出事件
+//初始化系统监听器
 function fnInitEventListenner() {
+    //监听退出事件
     api.addEventListener({
         name: 'keyback'
     }, function(ret, err) {
@@ -222,9 +223,15 @@ function fnInitEventListenner() {
             }
         });
     });
+
+    //监听网络状态
+    api.addEventListener({
+        name: 'offline'
+    }, function(ret, err){
+        alert('网络已断开');
+
+    });
 }
-
-
 
 //打开个人中心
 function fnOpenPersonalCenter() {
