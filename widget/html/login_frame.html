@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
@@ -125,7 +124,7 @@ function fnLogin() {
                 name: 'main',
                 url: './main.html',
                 pageParam: {
-                    name:'test'   
+                    name:'test'  
                 }
             });
         } else {
@@ -138,15 +137,16 @@ function fnLogin() {
                 alert('账号或密码错！')
                 username.outerHTML = username.outerHTML;  //原生js清空输入框
                 //password.outerHTML = password.outerHTML;  //清空密码
-                var p = $api.byId('password');  //获取密码框对象 
-                $api.val(p, '');   //api.val(le, 'val')：只有arg1时返回le的value；有arg2时: arg2设置为le的新value值;
-
+                var pw = $api.byId('password');  //获取密码框对象 
+                $api.val(pw, '');   //api.val(le, 'val')：只有arg1时返回le的value；有arg2时: arg2设置为le的新value值;
             } 
             console.log('Unknow Error!')
             alert(JSON.stringify(err));  
         }
     }); 
 }
+
+
 </script>
 
 </html>
