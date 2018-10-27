@@ -97,10 +97,16 @@ function fnRegister() {
             },
         }
     }, function(ret, err) {  //回调返回ret或err json对象; 控制台调试: console.log($api.jsonToStr(ret));
-        if (ret && ret.id) {  
+        if (ret && ret.id) {   
             console.log(ret.username)
             alert('用户'+ret.username+'注册成功！');
             api.closeWin();
+            //从本页面调用login_frame.html页面下的setUsername()函数
+            api.execScript({   
+                name: 'login',   //函数所在的win名称  
+                frameName: 'login_frame',   //函数所在的frame名称
+                script: 'fnSetUsername(\"' + usernameValue +'\");'  // 函数名称加上传递的参数
+            });
         } else {
             if (ret.error.statusCode == 202){  //调试：console.log(ret.error.statusCode) 
                 alert('用户名重复');
