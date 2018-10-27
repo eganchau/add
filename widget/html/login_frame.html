@@ -87,6 +87,12 @@ apiready = function() {
 
 };
 
+//设置用户名
+function fnSetUsername(username_) {
+    var username = $api.byId('username');
+    $api.val(username, username_);
+}
+
 function fnLogin() {
     var username = $api.byId('username');
     var password = $api.byId('password');
