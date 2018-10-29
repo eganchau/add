@@ -11,7 +11,9 @@
     html,
     body {
         height: 100%;
-        background-color: rgba(0,0,0,0.4);
+        /*background-color: rgba(0,0,0,0.4);*/  /*页面数据可拖动，背景必须跟随拖动改变*/
+        background: transparent;  /*设置背景透明*/
+        /*背景颜色在上一个页面（main.html）传过来*/
     }
     
     header {
@@ -57,17 +59,73 @@
         <div class="title">选择所需服务的地区</div>
     </header>
     <section id="list">
-        <div class="city" tapmode onclick="api.closeFrame();">广州</div>
+        <!-- <div class="city" tapmode onclick="api.closeFrame();">广州</div> -->
     </section>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 apiready = function() {
-    fnGetCityList();
+    
+    cityList = fnGetCityList();
+    fnUpadtaCityList(cityList);
+
 };
 
+var cityList;
+//获取城市列表信息
 function fnGetCityList() {
-    ;
+    var params = {  //根据文档构造参数
+        fields: {
+            createdAt: false,   //过虑不需要的字段
+            updataAt: false
+        }, 
+        where: {},   //查找的条件
+        skip: 0,   //页数
+        limit: 20  //城市数量
+    }
+    params = $api.jsonToStr(params);  //对象转换成json
+    //获取数据请求
+    api.ajax({
+        url: 'http://d.apicloud.com/mcm/api/city?filter=' + params,
+        method: 'get',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
+        }        
+    },function(ret, err){
+        if (ret) {
+            //console.log($api.jsonToStr(ret));  //console.log不能直接输出object,需要转化为str
+            cityList = $api.jsonToStr(ret);
+            fnUpadtaCityList(cityList);
+        } else {
+            console.log($api.jsonToStr(err));
+            alert( JSON.stringify( err ) );
+        }
+    });
+}
+
+//在本frame中更新html的list DOM元素
+function fnUpadtaCityList(data_) {
+    if (data_.constructor != '') {
+        console.log('no')
+    }
+    var list = $api.byId('list');
+    var html = '';  //定义str型变量
+    for (var i = 0; i < data_.length; i++) {
+        html += '<div class="city" tapmode onclick="fnSelectCity('+ i +');">'+ data_[i].name +'</div>'
+    }
+    $api.html(list, html);
+}
+
+//返回自定义事件 cityChange
+function fnSelectCity(index_) {
+    api.sendEvent({
+        name: 'cityChange',
+        extra: {
+            currentCity: cityList[index_]
+        }
+    });
+    api.closeFrame();
 }
 
 </script>

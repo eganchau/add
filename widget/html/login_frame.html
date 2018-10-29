@@ -125,12 +125,14 @@ function fnLogin() {
         }
     }, function(ret, err) {
         if (ret && ret.userId) {
+
+            
             $api.setStorage("userInfo", ret);  //登录成功把userInfo设置在本地缓存
             api.openWin({
                 name: 'main',
                 url: './main.html',
                 pageParam: {
-                    name:'test'  
+                    name:'test'
                 }
             });
         } else {

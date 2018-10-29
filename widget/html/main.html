@@ -126,20 +126,13 @@ apiready = function(){
     headerH = $api.offset(header).h;  //获取header的高度
     menus = $api.domAll(nav, '.menu'); //dom元素选择器; arg1: 父元素 arg2: 选择器
 
-
+    var cityList_ = []
     var userInfo = $api.getStorage('userInfo');
     if (userInfo.id) {
-        console.log('get commodity list;')
-        var commodityList = fnGetCommodityList();
+        var commodityList = fnGetCommodityList();  //获取商品列表
     }
-    var commodityList = $api.jsonToStr(commodityList);
-    for (let l in commodityList) {
-        console.log(l);    
-    }
+    //处理商品列表
     
-    //console.log(typeof commodityList);
-    
-
     //循环生成frames列表 
     var frameList = [];  //列表类型  
     for (var i=0; i<menus.length; i++) {
@@ -148,7 +141,6 @@ apiready = function(){
             url: './main_frame_'+ i +'.html',
         });
     }
-
     //打开frame组
     api.openFrameGroup ({
         name: 'mainFrameGroup',
@@ -220,11 +212,15 @@ function fnSetNavMenuSelected(index_) {
     }
 }
 
+//打开城市列表
 var headerH;
+var cityList_
 function fnOpenCitySelectorFrame() {
+
     api.openFrame({
         name: 'cityselector_frame',
         url: './cityselector_frame.html',
+        bgColor: 'rgba(0,0,0,0.4)',  //指定打开frame的背景颜色
         rect: {
             x: 0,
             y: headerH,
@@ -232,15 +228,27 @@ function fnOpenCitySelectorFrame() {
             h: 'auto'
         },
         pageParam: {
-            name: 'value'
+            cityList: cityList_
         },
         bounces: true
     });
     $api.addCls($api.byId('cityArrow'), 'arrow-up');  //修改前头样式
 }
 
+
+
 //初始化系统监听器
 function fnInitEventListenner() {
+    //监听城市变化
+    api.addEventListener({
+        name: 'cityChange'
+    }, function(ret, err){
+        if( ret ){
+             alert( JSON.stringify( ret ) );
+        }else{
+             alert( JSON.stringify( err ) );
+        }
+    });
     //监听退出事件
     api.addEventListener({
         name: 'keyback'
@@ -255,6 +263,7 @@ function fnInitEventListenner() {
             }
         });
     });
+
 }
 
 //打开个人中心
