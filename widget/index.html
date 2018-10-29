@@ -19,6 +19,7 @@ apiready = function(){
 
     var userInfo = $api.getStorage('userInfo');
     if (userInfo && userInfo.id) {
+
         api.openWin({
             name: 'main',
             url: './html/main.html',

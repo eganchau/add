@@ -159,13 +159,23 @@ apiready = function(){
              fnSetNavMenuSelected(ret.index); //根据index变更nav的样式
         }
     });
+
+    api.toast({
+        msg: '用户已登录',
+        duration: 2000,
+        location: 'middle'
+    });
+
+
 }
+
+
 
 //获取商品列表
 function fnGetCommodityList() {
     var params = {  //根据文档构造参数
-        fields: {},  
-        where: {},   //过虑条件
+        fields: {},  //过滤字段；字段名: false 
+        where: {},   //条件
         skip: 0,   //页数
         limit: 5  //城市数量
     }

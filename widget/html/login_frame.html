@@ -85,6 +85,7 @@
 <script type="text/javascript">
 apiready = function() {
 
+
 };
 
 //设置用户名
@@ -129,6 +130,14 @@ function fnLogin() {
 
             
             $api.setStorage("userInfo", ret);  //登录成功把userInfo设置在本地缓存
+
+            api.toast({
+                msg: '登录成功',  //登录消息提示
+                duration: 2000,
+                location: 'bottom'
+            });
+
+            //打开main页面
             api.openWin({
                 name: 'main',
                 url: './main.html',
