@@ -106,8 +106,9 @@ function fnLogout() {
                 duration: 1000,
                 location: 'bottom'
             });
-            $api.clearStorage(); // 清除所有登录数据 或：$api.setStorage("userInfo", '');
-            setTimeout("api.closeWidget();", 1000);  //延时关闭应用
+            //$api.clearStorage(); // 清除所有的本地数据（慎用）
+            $api.setStorage("userInfo", '');   //重设个别数据、另类清空
+            setTimeout("api.closeWidget();", 2000);  //延时关闭应用
         }
     });
     //发送loginout事件

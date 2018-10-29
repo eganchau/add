@@ -178,7 +178,8 @@ function fnLogout() {
                 duration: 1000,
                 location: 'bottom'
             });
-            $api.clearStorage(); // 清除登录数据 或：$api.setStorage("userInfo", '');
+            //$api.clearStorage(); // 清除所有的本地数据（慎用）
+            $api.setStorage("userInfo", '');   //重设个别数据、另类清空
             setTimeout("api.closeWidget();", 2000);  //延时关闭应用
         }
     });
