@@ -64,14 +64,12 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
-apiready = function() {
-    
-    cityList = fnGetCityList();
+apiready = function() {    
+    fnGetCityList();
     fnUpadtaCityList(cityList);
-
 };
 
-var cityList;
+var cityList;  //声明
 //获取城市列表信息
 function fnGetCityList() {
     var params = {  //根据文档构造参数
@@ -94,9 +92,10 @@ function fnGetCityList() {
         }        
     },function(ret, err){
         if (ret) {
-            //console.log($api.jsonToStr(ret));  //console.log不能直接输出object,需要转化为str
-            cityList = $api.jsonToStr(ret);
+            cityList = ret;  //把ret赋给全局变量方便调用；
+            //console.log(cityList[1].city_name); console.log(cityList.length);  //测试获取数据对象
             fnUpadtaCityList(cityList);
+
         } else {
             console.log($api.jsonToStr(err));
             alert( JSON.stringify( err ) );
@@ -104,30 +103,39 @@ function fnGetCityList() {
     });
 }
 
+
 //在本frame中更新html的list DOM元素
 function fnUpadtaCityList(data_) {
-    if (data_.constructor != '') {
-        console.log('no')
-    }
     var list = $api.byId('list');
     var html = '';  //定义str型变量
-    for (var i = 0; i < data_.length; i++) {
-        html += '<div class="city" tapmode onclick="fnSelectCity('+ i +');">'+ data_[i].name +'</div>'
+    //在apicloud内对象获取length属性失败，捕获之！
+    try {
+        for (var i = 0; i < data_.length; i++) {
+            //组织循环内的的html标签
+            html += '<div class="city" tapmode onclick="fnSelectCity('+ i +');">'+ data_[i].city_name +'</div>'
+        }    
+    } catch(err) {
+        ;
     }
+    
     $api.html(list, html);
 }
 
-//返回自定义事件 cityChange
+//返回自定义事件 cityChange （根据城市列表的index_取值）
 function fnSelectCity(index_) {
     api.sendEvent({
         name: 'cityChange',
         extra: {
-            currentCity: cityList[index_]
+            currentCity: cityList[index_].city_name
         }
     });
     api.closeFrame();
 }
 
+//也可以通过$api.setStorage实现
+function fnSetMainCityText(index_) {
+    $api.setStorage('currentCity_', cityList[index_].city_name);
+}
 </script>
 
 </html>
