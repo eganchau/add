@@ -117,7 +117,7 @@
     <section></section>
     <footer id="footer">
         <div class="item">
-            <div class="button setting">设置</div>
+            <div class="button setting" tapmode onclick="fnOpenSettingWin();">设置</div>
         </div>
         <div class="item">
             <div class="button message">消息</div>
@@ -131,9 +131,11 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 apiready = function() {
+    var fotter = $api.byId('footer');
     var header = $api.byId("header");  //使用id获取变量值
     $api.fixStatusBar(header);  //使用沉浸式（消除状顶部态栏-）
     var headerH = $api.offset(header).h;  //获取header的高度
+    var footerH = $api.offset(footer).h;
 
     api.openFrame({
         name: 'personalcenter_frame',
@@ -142,7 +144,7 @@ apiready = function() {
             x: 0,
             y: headerH,
             w: 'auto',
-            h: 'auto'
+            h: api.winHeight - headerH - footerH   //使用窗口高度减
         },
         pageParam: {
             name: 'value'
@@ -150,6 +152,17 @@ apiready = function() {
         //bounces: true
     });
 };
+
+//打开设置win
+function fnOpenSettingWin() {
+    api.openWin({
+        name: 'setting',
+        url: './setting.html',
+        pageParam: {
+            name: 'test'
+        }
+    });
+}
 
 
 //登出函数
@@ -160,6 +173,11 @@ function fnLogout() {
         buttons: ['确定', '取消']
     }, function(ret, err) {
         if (ret.buttonIndex == 1) {
+            api.toast({
+                msg: '正在退出',
+                duration: 1000,
+                location: 'bottom'
+            });
             $api.clearStorage(); // 清除登录数据 或：$api.setStorage("userInfo", '');
             setTimeout("api.closeWidget();", 2000);  //延时关闭应用
         }

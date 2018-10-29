@@ -84,7 +84,7 @@
                 <div class="text"></div>
             </div>
         </div>
-        <div class="button">退出登录</div>
+        <div class="button" tapmode onclick="fnLogout();">退出登录</div>
     </section>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
@@ -92,6 +92,32 @@
 apiready = function() {
 
 };
+
+//登出函数
+function fnLogout() {
+    api.confirm({
+        title: '提示',
+        msg: '是否退出？将清除userInfo信息',
+        buttons: ['确定', '取消']
+    }, function(ret, err) {
+        if (ret.buttonIndex == 1) {
+            api.toast({
+                msg: '正在退出',
+                duration: 1000,
+                location: 'bottom'
+            });
+            $api.clearStorage(); // 清除所有登录数据 或：$api.setStorage("userInfo", '');
+            setTimeout("api.closeWidget();", 1000);  //延时关闭应用
+        }
+    });
+    //发送loginout事件
+    api.sendEvent({
+        name: 'loginout',
+        extra: {
+            msg: '登出成功'
+        }
+    });
+}
 </script>
 
 </html>
