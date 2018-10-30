@@ -73,7 +73,7 @@
 <body>
     <section>
         <div class="option">
-            <div class="title">清除缓存</div>
+            <div class="title" tapmode onclick="fnClearLocalStorage();">清除缓存</div>
             <div class="arrow-panel">
                 <div id="cacheSize" class="text"></div>
             </div>
@@ -92,6 +92,21 @@
 apiready = function() {
 
 };
+
+//清除本地缓存
+function fnClearLocalStorage() {
+    api.confirm({
+        title: '提示',
+        msg: '是否清除本地所有信息？',
+        buttons: ['确定', '取消']
+    }, function(ret, err){
+        if( ret ){
+             $api.clearStorage();
+        }else{
+             alert( JSON.stringify( err ) );
+        }
+    });
+}
 
 //登出函数
 function fnLogout() {
