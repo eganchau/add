@@ -116,22 +116,38 @@
 <script type="text/javascript">
 apiready = function(){
 
-    fnInitEventListenner();  //初始化事件监听器（监听退出）
+    
     //变量
     var header = $api.byId("header");  //使用id获取变量值
     var nav =$api.byId('nav');
     $api.fixStatusBar(header);  //使用沉浸式（消除状顶部态栏-）
-    var navH = $api.offset(nav).h;
+    
     //全局变量
+    navH = $api.offset(nav).h;
     headerH = $api.offset(header).h;  //获取header的高度
     menus = $api.domAll(nav, '.menu'); //dom元素选择器; arg1: 父元素 arg2: 选择器
 
-    var cityList_ = []
-    var userInfo = $api.getStorage('userInfo');
-    if (userInfo.id) {
-        var commodityList = fnGetCommodityList();  //获取商品列表
+    //fun
+    fnInitEventListenner();  //初始化事件监听器（监听退出）
+    fnOpenFrameGroup();
+
+    api.toast({
+        msg: '用户已登录',
+        duration: 2000,
+        location: 'middle'
+    });
+}
+
+
+//打开frame组
+var headerH, menus, navH;
+function fnOpenFrameGroup() {
+    var currentCity = $api.getStorage('currentCity');
+    if (!currentCity) {
+        fnOpenCitySelectorFrame();
     }
-    //处理商品列表
+    fnGetCommodityList();  //获取商品列表
+
     
     //循环生成frames列表 
     var frameList = [];  //列表类型  
@@ -159,18 +175,7 @@ apiready = function(){
              fnSetNavMenuSelected(ret.index); //根据index变更nav的样式
         }
     });
-
-    api.toast({
-        msg: '用户已登录',
-        duration: 2000,
-        location: 'middle'
-    });
-
-    fnGetCommodityList();
-
 }
-
-
 
 //获取商品列表
 function fnGetCommodityList() {
@@ -198,10 +203,14 @@ function fnGetCommodityList() {
         }
     },function(ret, err){
         if (ret) {
-            return ret
-            //alert( JSON.stringify( ret ) );
-            //console.log($api.jsonToStr(ret));
+            // console.log($api.jsonToStr(ret));            
             $api.setStorage('commodityList', ret);  //保存在local storage缓存中
+            api.toast({
+                msg: 'TestMsg:[commodityList was save]',
+                duration: 1000,
+                location: 'middle'
+            });
+            //$api.toast('Storage', 'commodityList was save',  6000);
             api.hideProgress();  //关闭请求进度
         } else {
             alert( JSON.stringify( err ) );
