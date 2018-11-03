@@ -257,7 +257,7 @@
 {{~it:value:index}}    
 <div class="ware ware-1">
     <div class="content">
-        <img class="thumbnail" src="{{=value.imgUrl}}">
+        <img onload="fnLoadImages(this)" data-url="{{=value.imgUrl}}" class="thumbnail" src="../image/default_rect.png">
         <div class="info">
             <div class="name">{{=value.commodity_name}}</div>
             <div class="description">{{=value.description}}</div>
@@ -285,16 +285,148 @@
 <script type="text/javascript">
 apiready = function(){
     var data = $api.getStorage('commodityList');  //读取local storage
-    fnUpdateWareList(data);
+    initListener();  //监听上拉
+    initRefresh();  //下拉刷新
+    fnUpdateWareList(data);  //更新商品列表数据
+    fnUpdateBanner();  //更新banner图
+    
 };
 
+function initListener() {
+    //监听上拉
+    api.addEventListener({
+        name:'scrolltobottom',
+        extra:{
+            threshold:200  //0为滑动到底部；200为高度
+        }
+    }, function(ret, err){        
+        fnGetCommodityList(true);
+    });
+}
+
+function initRefresh() {
+    api.setRefreshHeaderInfo({
+        visible: true,
+        loadingImg: 'widget://image/refresh.png',  //img
+        bgColor: '#ccc',
+        textColor: '#fff',
+        textDown: '下拉刷新...',
+        textUp: '松开刷新...',
+        showTime: true
+    }, function(ret, err){
+        //更新商品接口数据
+        //运行main窗口下的fnGetCommodityList函数
+        fnGetCommodityList();
+        api.refreshHeaderLoadDone();  //还原下拉刷新
+
+    });
+}
+
 //更新商品列表信息
-function fnUpdateWareList(data_) {
+function fnUpdateWareList(data_, loadMore_) {
     //console.log($api.jsonToStr(data_));  //test: 后台输出数据 
     var list = $api.byId('list');  
     var tempFn = doT.template($api.byId('template').innerHTML);  //编译模板函数
     var resultText = tempFn(data_);
-    $api.html(list, resultText);
+    if (loadMore_) {  //判断是否加载更多
+        $api.append(list, resultText);
+        if (data_.length < LIMIT) {
+            var pushStatus = $api.byId('pushStatus');
+            pushStatus.innerHTML = "没有更多了.";
+        }
+    } else {
+        $api.html(list, resultText);
+    }
+    api.parseTapmode();
+}
+
+//获取商品列表
+var skip = 0;  //翻页
+var LIMIT = 5;  //5条/页
+function fnGetCommodityList(laodMore_) {
+    api.showProgress({
+        style: 'default',   //默认样式
+        animationType: 'fade',  //动类型
+        title: '努力加载中...',  
+        text: '先喝杯茶...',
+        modal: false
+    });
+    if (laodMore_) {
+        skip += LIMIT;
+    } else {
+        skip = 0
+    }
+    var params = {  //根据文档构造参数
+        fields: {},  //过滤字段；字段名: false 
+        where: {},   //条件
+        skip: skip,   //页数
+        limit: LIMIT  //城市数量
+    }
+    params = $api.jsonToStr(params);  //对象转换成json
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/commodity?filter=' + params,
+        method: 'get',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
+        }
+    },function(ret, err){
+        if (ret) {
+            // console.log($api.jsonToStr(ret));            
+            //$api.setStorage('commodityList', ret);  //保存在local storage缓存中
+            fnUpdateWareList(ret, laodMore_)
+            api.toast({
+                msg: '获取商品列表成功',
+                duration: 1000,
+                location: 'middle'
+            });
+            //$api.toast('Storage', 'commodityList was save',  6000);
+            
+            api.hideProgress();  // 隐藏加载状态对话框
+            api.refreshHeaderLoadDone();  
+        } else {
+            alert( JSON.stringify( err ) );
+        }
+    });
+}
+
+//更新banner图
+function fnUpdateBanner() {
+    var banner = $api.byId('banner');
+    banner.src = ''
+    //api图片缓存技术
+    api.imageCache({
+        //image Url；一般会从接口中请求
+        url: 'http://ae26d04fa01bd0524237.qiniucdn.apicloud-system.com/apicloud/51ff969cd5aae0974016f1871d638784.png'  
+    }, function(ret, err){
+        if( ret ){  //返回值为本地缓存图片的对象   
+             if (ret && ret.status) {  //根据返回值及返回状态判断
+                banner.src = ret.url  //把banner的src值设置为本地缓存url
+             }
+        }else{
+             alert( JSON.stringify( err ) );
+        }
+    });
+}
+
+//商品列表中的图片缓存函数
+function fnLoadImages(el_) {
+    var dataUrl = $api.attr(el_, 'data-url'); //api 取标签的某个属性
+    //判断图片url存在，则缓存
+    if (dataUrl) {
+        api.imageCache({
+            url: dataUrl
+        }, function(ret, err){
+            if( ret ){
+                 el_.src = ret.url;  //ret.url是本地缓存图片的地址
+                 //console.log(ret.url);
+                 console.log('图片成功本地缓存');
+                 $api.attr(el_, 'data-url', '');  //设置标签的data-url属性值为''(空值)
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+    }
 }
 
 </script>

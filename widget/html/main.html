@@ -12,7 +12,7 @@
 			position: relative;  /*位置*/
 			width: 100%;
 			height: 50px;  
-			background-color: #C71585;
+			background-color: #003366;
 		}
         header .left {
             position: absolute;
@@ -78,7 +78,7 @@
             position: relative;  /*非固定元素*/
             width: 100%;
             height: 40px;
-            background-color: #C71585;
+            background-color: #003366;
         }
         nav .menu{
             -webkit-box-flex: 1;
@@ -86,7 +86,7 @@
             flex: 1;
             width: 100%;
             height: 40px;
-            font-size: 13px; color: #f973b8; text-align: center;
+            font-size: 13px; color: #fff; text-align: center;
         }
         /*选中样式*/
         nav .menu.selected {
@@ -114,10 +114,9 @@
 
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
-apiready = function(){
-
-    
-    //变量
+apiready = function(){    
+    //变量  
+    alert(api.fsDir);
     var header = $api.byId("header");  //使用id获取变量值
     var nav =$api.byId('nav');
     $api.fixStatusBar(header);  //使用沉浸式（消除状顶部态栏-）
@@ -125,11 +124,24 @@ apiready = function(){
     //全局变量
     navH = $api.offset(nav).h;
     headerH = $api.offset(header).h;  //获取header的高度
-    menus = $api.domAll(nav, '.menu'); //dom元素选择器; arg1: 父元素 arg2: 选择器
+    menus = $api.domAll(nav, '.menu'); //dom元素选择器; arg1: 父元素 arg2: 选择器    
 
     //fun
     fnInitEventListenner();  //初始化事件监听器（监听退出）
-    fnOpenFrameGroup();
+    api.execScript({  //获取商品列表 
+        name: 'main',
+        frameName: 'main_frame_1',
+        script: 'fnGetCommodityList();'
+    });
+
+    var currentCity = $api.getStorage('currentCity');
+    if (!currentCity) {
+        console.log('miss currentCity!');
+        fnOpenCitySelectorFrame();
+        return;
+    } else {
+        fnOpenFrameGroup();
+    }
 
     api.toast({
         msg: '用户已登录',
@@ -138,17 +150,11 @@ apiready = function(){
     });
 }
 
-
 //打开frame组
+var currentCity
 var headerH, menus, navH;
 function fnOpenFrameGroup() {
-    var currentCity = $api.getStorage('currentCity');
-    if (!currentCity) {
-        fnOpenCitySelectorFrame();
-    }
-    fnGetCommodityList();  //获取商品列表
-
-    
+       
     //循环生成frames列表 
     var frameList = [];  //列表类型  
     for (var i=0; i<menus.length; i++) {
@@ -177,49 +183,12 @@ function fnOpenFrameGroup() {
     });
 }
 
-//获取商品列表
-function fnGetCommodityList() {
-    api.showProgress({
-        style: 'default',   //默认样式
-        animationType: 'fade',  //动类型
-        title: '努力加载中...',  
-        text: '先喝杯茶...',
-        modal: false
-    });
-    var params = {  //根据文档构造参数
-        fields: {},  //过滤字段；字段名: false 
-        where: {},   //条件
-        skip: 0,   //页数
-        limit: 5  //城市数量
-    }
-    params = $api.jsonToStr(params);  //对象转换成json
 
-    api.ajax({
-        url: 'https://d.apicloud.com/mcm/api/commodity?filter=' + params,
-        method: 'get',
-        headers: {
-            "X-APICloud-AppId": "A6084933293707",
-            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
-        }
-    },function(ret, err){
-        if (ret) {
-            // console.log($api.jsonToStr(ret));            
-            $api.setStorage('commodityList', ret);  //保存在local storage缓存中
-            api.toast({
-                msg: 'TestMsg:[commodityList was save]',
-                duration: 1000,
-                location: 'middle'
-            });
-            //$api.toast('Storage', 'commodityList was save',  6000);
-            api.hideProgress();  //关闭请求进度
-        } else {
-            alert( JSON.stringify( err ) );
-        }
-    });
-}
 
 //点击菜单切换frame
 function fnSetNavMenuIndex(index_) {
+
+    console.log('点击了'+index_+'frame');
     fnSetNavMenuSelected(index_);  //提前调用滑动的fn 达到优化点击的效果
     api.setFrameGroupIndex({
         name: 'mainFrameGroup',
@@ -255,7 +224,7 @@ function fnOpenCitySelectorFrame() {
             w: 'auto',
             h: 'auto'
         },
-        pageParam: {
+        pageParam: { 
             name: 'test'
         },
         bounces: true
@@ -263,18 +232,19 @@ function fnOpenCitySelectorFrame() {
     
 }
 
-
-
-//初始化系统监听器
+//初始化事件监听器
 function fnInitEventListenner() {
+    
     //监听城市变化
     api.addEventListener({
         name: 'cityChange'
     }, function(ret, err){
         if( ret ){
+             console.log('监听到cityChange事件；');
              var city = $api.byId('cityText');
              city.innerHTML = ret.value.currentCity;
              restArrowState();  //还原箭头样式
+             fnOpenFrameGroup();
         }else{
              alert( JSON.stringify( err ) );
         }
@@ -293,7 +263,6 @@ function fnInitEventListenner() {
             }
         });
     });
-
 }
 
 //箭头选择样式

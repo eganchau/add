@@ -73,7 +73,7 @@
 <body>
     <section>
         <div class="option">
-            <div class="title" tapmode onclick="fnClearLocalStorage();">清除缓存</div>
+            <div class="title" tapmode onclick="fnClearCache();">清除缓存</div>
             <div class="arrow-panel">
                 <div id="cacheSize" class="text"></div>
             </div>
@@ -90,21 +90,28 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 apiready = function() {
-
+    fnGetCacheSize();
 };
 
+//获取已使用的缓存大小
+function fnGetCacheSize() {
+    var cacheSize = $api.byId('cacheSize');
+    api.getCacheSize(function(ret){
+        var cacheSize_ = ret.size;
+        cacheSize_ = parseInt((cacheSize_/1024/1024)*100)/100;  //换算为M
+        cacheSize.innerHTML = cacheSize_ + ' M';
+    });
+}
+
 //清除本地缓存
-function fnClearLocalStorage() {
-    api.confirm({
-        title: '提示',
-        msg: '是否清除本地所有信息？',
-        buttons: ['确定', '取消']
-    }, function(ret, err){
-        if( ret ){
-             $api.clearStorage();
-        }else{
-             alert( JSON.stringify( err ) );
-        }
+function fnClearCache() {
+    api.clearCache(function(){
+        api.toast({
+            msg:'清除完成'
+        });
+        setTimeout(function(){
+            fnGetCacheSize();
+        }, 500);   //延时500毫秒执行函数
     });
 }
 

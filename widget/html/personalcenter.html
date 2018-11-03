@@ -169,7 +169,8 @@ function fnOpenSettingWin() {
 function fnLogout() {
     api.confirm({
         title: '提示',
-        msg: '是否退出？将清除userInfo信息',
+        // msg: '是否退出？将清除userInfo信息',
+        msg: '是否退出？将清除所有缓存信息',
         buttons: ['确定', '取消']
     }, function(ret, err) {
         if (ret.buttonIndex == 1) {
@@ -178,8 +179,8 @@ function fnLogout() {
                 duration: 1000,
                 location: 'bottom'
             });
-            //$api.clearStorage(); // 清除所有的本地数据（慎用）
-            $api.setStorage("userInfo", '');   //重设个别数据、另类清空
+            $api.clearStorage(); // 清除所有的本地数据（慎用）
+            //$api.setStorage("userInfo", '');   //重设个别数据、另类清空
             setTimeout("api.closeWidget();", 2000);  //延时关闭应用
         }
     });

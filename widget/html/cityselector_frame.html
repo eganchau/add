@@ -123,7 +123,9 @@ function fnUpadtaCityList(data_) {
 
 //返回自定义事件 cityChange （根据城市列表的index_取值）
 function fnSelectCity(index_) {
+    console.log('currentCity 设置 local Storage');
     $api.setStorage('currentCity', cityList[index_].city_name);  //保存当前城市信息
+    console.log('发送事件 cityChange')
     api.sendEvent({
         name: 'cityChange',
         extra: {
