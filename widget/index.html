@@ -15,8 +15,8 @@
 <script type="text/javascript">
 apiready = function(){
 
-    
-
+    init();
+    fnGetCommodityList();
     var userInfo = $api.getStorage('userInfo');
     if (userInfo && userInfo.id) {
 
@@ -41,5 +41,54 @@ apiready = function(){
     }    
 };
 
+function init() {
+
+    
+
+    var commodityList = $api.getStorage('commodityList');
+    if (!commodityList) {
+        commodityList = [{"id":"5bcd192423c39cc74241d659","commodity_name":"混合果汁","price":9.9,"amount":99,"inventory":99,"description":"混有小强的jusic","origin_price":14,"imgUrl":"http://ae26d04fa01bd0524237.qiniucdn.apicloud-system.com/apicloud/7445536923f11ba25b0b2d4c47526440.png","unit":"瓶","createdAt":"2018-10-22T00:26:12.108Z","updatedAt":"2018-10-30T09:26:13.097Z"},{"id":"5bcd19c6ef57272b6aa7b731","commodity_name":"学生奶(光明)","price":3.5,"amount":99,"inventory":99,"description":"一口毒奶","origin_price":7,"imgUrl":"http://ae26d04fa01bd0524237.qiniucdn.apicloud-system.com/apicloud/7bd389413feac947485101bbbfce7139.png","unit":"纸包","createdAt":"2018-10-22T00:28:54.297Z","updatedAt":"2018-10-30T09:26:05.104Z"},{"id":"5bcd1a06cdafdcf25286da26","commodity_name":"纸巾","price":2,"amount":88,"inventory":88,"description":"打飞机必备","origin_price":4,"imgUrl":"http://ae26d04fa01bd0524237.qiniucdn.apicloud-system.com/apicloud/202df68315d52ee1a4448c3d77aa6fa9.png","unit":"包","createdAt":"2018-10-22T00:29:58.880Z","updatedAt":"2018-10-30T09:25:44.967Z"},{"id":"5bcd1a24565d2cef2a12d537","commodity_name":"保鲜膜","price":3,"amount":77,"inventory":77,"description":"我就是一层膜","origin_price":5,"imgUrl":"http://ae26d04fa01bd0524237.qiniucdn.apicloud-system.com/apicloud/df06cff6e9a7d0c44bc9b48bf3f15722.png","unit":"盒","createdAt":"2018-10-22T00:30:28.347Z","updatedAt":"2018-10-30T09:25:35.981Z"}]
+    }
+}
+
+function fnGetCommodityList() {
+    api.showProgress({
+        style: 'default',   //默认样式
+        animationType: 'fade',  //动类型
+        title: '努力加载中...',  
+        text: '先喝杯茶...',
+        modal: false
+    });
+    var params = {  //根据文档构造参数
+        fields: {},  //过滤字段；字段名: false 
+        where: {},   //条件
+        skip: 0,   //页数
+        limit: 5  //城市数量
+    }
+    params = $api.jsonToStr(params);  //对象转换成json
+
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/commodity?filter=' + params,
+        method: 'get',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
+        }
+    },function(ret, err){
+        if (ret) {
+            // console.log($api.jsonToStr(ret));            
+            $api.setStorage('commodityList', ret);  //保存在local storage缓存中
+            api.toast({
+                msg: 'TestMsg:[commodityList was save]',
+                duration: 1000,
+                location: 'middle'
+            });
+            //$api.toast('Storage', 'commodityList was save',  6000);
+            api.hideProgress();  //关闭请求进度
+        } else {
+            alert( JSON.stringify( err ) );
+        }
+    });
+}
 </script>
 </html>
