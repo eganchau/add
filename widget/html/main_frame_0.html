@@ -6,175 +6,175 @@
     <title>main_frame</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <style>
-        html,
-        body{
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-flex-flow: column;
-            flex-flow: column;
-            height: 100%;
-            width: 100%;
-        }
+    html,
+    body{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-flex-flow: column;
+        flex-flow: column;
+        height: 100%;
+        width: 100%;
+    }
 
-        body .eqution {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
-            -webkit-flex-flow: row;  /*流式：即顺序排列*/
-            flex-flow: row;
-            position: relative;  /*非固定元素*/
+    body .eqution {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+        -webkit-flex-flow: row;  /*流式：即顺序排列*/
+        flex-flow: row;
+        position: relative;  /*非固定元素*/
 
-            top: 5px;
-            width: 100%;
-            height: auto;
-            background-color: #993399;
-            border-radius: 15px 15px 15px 15px;
-        }
-        body .eqution div { 
-            -webkit-box-flex: 1;
-            -webkit-flex: 1;
-            flex: 1;
+        top: 5px;
+        width: 100%;
+        height: auto;
+        background-color: #993399;
+        border-radius: 15px 15px 15px 15px;
+    }
+    body .eqution div { 
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
 
-            width: 15%;
-            height: 85px;
-            background: yellow;
-            margin: 5px 5px;
-            font-size: 55px;
-            text-align: center;
-            line-height: 85px;
-            border-radius:8px 8px 8px 8px;
-        }
-        body .eqution input {
-            width: 80%;
-            height: 70px;
-            border: 1px;
-            border-color: red;
-        }
+        width: 15%;
+        height: 85px;
+        background: yellow;
+        margin: 5px 5px;
+        font-size: 55px;
+        text-align: center;
+        line-height: 85px;
+        border-radius:8px 8px 8px 8px;
+    }
+    body .eqution input {
+        width: 80%;
+        height: 70px;
+        border: 1px;
+        border-color: red;
+    }
 
-        body .mno_number {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
-            -webkit-flex-flow: row;  /*流式：即顺序排列*/
-            flex-flow: row;
-            position: relative;  /*非固定元素*/
-            top:10px;
-            width: 100%;
-            height: auto;
-            background-color: #993399;
-            border-radius: 15px 15px 15px 15px;
-        }
-        body .mno_number div { 
-            -webkit-box-flex: 1;
-            -webkit-flex: 1;
-            flex: 1;
+    body .mno_number {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+        -webkit-flex-flow: row;  /*流式：即顺序排列*/
+        flex-flow: row;
+        position: relative;  /*非固定元素*/
+        top:10px;
+        width: 100%;
+        height: auto;
+        background-color: #993399;
+        border-radius: 15px 15px 15px 15px;
+    }
+    body .mno_number div { 
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
 
-            width: 44%;
-            height: 50px;
-            background: #993399;
-            margin: 1px 3px;
-            font-size: 26px;color:#ffff;
-            text-align: center;
-            line-height: 40px;
-            border-radius:8px 8px 8px 8px;
-        }
-        body .mno_number input {
-            width: 80%;
-            height: auto;
-            border: 1px;
-            border-color: #fff;
-        }
+        width: 44%;
+        height: 50px;
+        background: #993399;
+        margin: 1px 3px;
+        font-size: 26px;color:#ffff;
+        text-align: center;
+        line-height: 40px;
+        border-radius:8px 8px 8px 8px;
+    }
+    body .mno_number input {
+        width: 80%;
+        height: auto;
+        border: 1px;
+        border-color: #fff;
+    }
 
-        body .choice {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
-            -webkit-flex-flow: row;  /*流式：即顺序排列*/
-            flex-flow: row;
-            position: relative;  /*非固定元素*/
-            font-size: 15px;color:#fff;
-            top:15px;
-            width: 100%;
-            height: auto;
-            background-color: #993399;
-            border-radius: 15px 15px 15px 15px;
-        }
-        body .choice div { 
-            -webkit-box-flex: 1;
-            -webkit-flex: 1;
-            flex: 1;
+    body .choice {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+        -webkit-flex-flow: row;  /*流式：即顺序排列*/
+        flex-flow: row;
+        position: relative;  /*非固定元素*/
+        font-size: 15px;color:#fff;
+        top:15px;
+        width: 100%;
+        height: auto;
+        background-color: #993399;
+        border-radius: 15px 15px 15px 15px;
+    }
+    body .choice div { 
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
 
-            
-            height: 20px;
-            margin:10px;
-            background: #993399;
-            text-align: center;
-            line-height: 18px;
-            border-radius:8px 8px 8px 8px;
-        }
 
-        body .result {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
-            -webkit-flex-flow: row;  /*流式：即顺序排列*/
-            flex-flow: row;
-            position: relative;  /*非固定元素*/
-            top:20px;
-            width: 100%;
-            height: auto;
-            background-color: #993399;
-            border-radius: 15px 15px 15px 15px;
-        }
-        body .result div { 
-            -webkit-box-flex: 1;
-            -webkit-flex: 1;
-            flex: 1;
+        height: 20px;
+        margin:10px;
+        background: #993399;
+        text-align: center;
+        line-height: 18px;
+        border-radius:8px 8px 8px 8px;
+    }
 
-            width: 15%;
-            height: 50px;
-            background: #993399;
-            margin: 1px 3px;
-            font-size: 21px;color:#fff;
-            text-align: center;
-            line-height: 40px;
-            border-radius:8px 8px 8px 8px;
-        }
+    body .result {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+        -webkit-flex-flow: row;  /*流式：即顺序排列*/
+        flex-flow: row;
+        position: relative;  /*非固定元素*/
+        top:20px;
+        width: 100%;
+        height: auto;
+        background-color: #993399;
+        border-radius: 15px 15px 15px 15px;
+    }
+    body .result div { 
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
 
-        body .submit {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
-            -webkit-flex-flow: row;  /*流式：即顺序排列*/
-            flex-flow: row;
-            position: absolute;  /*非固定元素*/
-            bottom: 0px;
-            width: 100%;
-            height: auto;
+        width: 15%;
+        height: 50px;
+        background: #993399;
+        margin: 1px 3px;
+        font-size: 21px;color:#fff;
+        text-align: center;
+        line-height: 40px;
+        border-radius:8px 8px 8px 8px;
+    }
 
-        }
-        body .submit div { 
-            -webkit-box-flex: 1;
-            -webkit-flex: 1;
-            flex: 1;
+    body .submit {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
+        -webkit-flex-flow: row;  /*流式：即顺序排列*/
+        flex-flow: row;
+        position: absolute;  /*非固定元素*/
+        bottom: 0px;
+        width: 100%;
+        height: auto;
 
-            font-size: 25px;color:#fff;
-            width: 40%;
-            height: 60px;
-            margin: 0 10px;
-            background: red;
-            text-align: center;
-            line-height: 70px; 
-            border-radius:15px 15px 15px 15px;
-        }
-    </style>
+    }
+    body .submit div { 
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
+
+        font-size: 25px;color:#fff;
+        width: 40%;
+        height: 60px;
+        margin: 0 10px;
+        background: red;
+        text-align: center;
+        line-height: 70px; 
+        border-radius:15px 15px 15px 15px;
+    }
+</style>
 </head>
 <body>
     <div class="eqution">
@@ -224,12 +224,63 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
-apiready = function(){
+    apiready = function(){
+        fnInitUIInput();
+        fnCreateEqution();
 
-    fnCreateEqution();
-};
+    };
+
+
+
 
 //监听输入框
+var number3_;
+function fnInitUIInput() {
+    var number3 = $api.byId('number3');
+    var rect = $api.offset(number3);
+    UIInput = api.require('UIInput');
+    UIInput.open({
+       rect: {
+        x: rect.l,
+        y: rect.t,
+        w: rect.w,
+        h: rect.h
+    },
+    styles: {
+        bgColor: 'yellow',
+        size: 44,
+        color: '#000',
+        placeholder: {
+            color: 'red'
+        }
+    },
+        autoFocus: false,  //一般设置为false，要手动判断画面切换完成使用popupKeyboard弹出键盘
+        maxRows: 4,
+        placeholder: '答?',
+        keyboardType: 'number',
+        fixedOn: api.frameName  //混合在frame上
+    }, function(ret, err){
+        var uiInputId = ret.id;
+        if (ret && ret.eventType == "show") {
+            setTimeout(function() {
+                UIInput.popupKeyboard({id: uiInputId});
+            }, 300)
+        } else if (ret.eventType == "change") {
+            UIInput.value({
+                id: uiInputId
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.status) {
+                        number3_ = parseInt(ret.msg);
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
+    });
+}
+
 
 //生成算式
 function fnCreateEqution() {
@@ -272,36 +323,56 @@ function fnCreateEqution() {
 
 
 //判断算式结果
+var UIInput;
+
 function fnJudgeResult(){
+
+
     var symbl = $api.byId('symbl');//表面符号
     var number1 = $api.byId('number1').innerHTML;
     var number2 = $api.byId('number2').innerHTML;
-    //console.log(symbl.innerHTML)
-    if (symbl.innerHTML == '-') {
-        //console.log('- 法');
-        var result = parseInt(number1) - parseInt(number2)
-    } else {
-        var result = parseInt(number1) + parseInt(number2)
-    }
-    
-    var number3 = $api.byId('number3');
     var goodResult = $api.byId('goodResult');
     var badResult = $api.byId('badResult');
-    if (number3.value == '') {
-        alert('答案为空！');
-        return;
+
+    
+    //计算结果
+    if (symbl.innerHTML == '-') {
+        var result = parseInt(number1) - parseInt(number2);
+    } else {
+        var result = parseInt(number1) + parseInt(number2);
     }
     
-    if(result == parseInt(number3.value)){
+
+
+    //判断结果
+    if (typeof number3_ != 'number' || isNaN(number3_)) {
+        alert('还没填写答案！')
+        fnClearResult();
+        return;
+    }
+    console.log(number3_);
+    console.log(result);
+    if(result == number3_){
         fnCreateEqution();
         goodResult.innerHTML = parseInt(goodResult.innerHTML) + 1;
-        number3.focus();
+        fnClearResult();
     } else {
+        console.log(typeof number3_);
         alert('回答错误  >_<~!, 重新作答。');
         badResult.innerHTML = parseInt(badResult.innerHTML) + 1;
-        number3.outerHTML=number3.outerHTML; //清空文本框
-        number3.focus();
+        //number3.outerHTML=number3.outerHTML; //清空文本框
+        //number3.focus();  //h5聚焦方法
+        fnClearResult();
     }
+    
+}
+
+//清空答案框并弹出键盘
+function fnClearResult() {
+    UIInput.value({
+        msg: ''
+    });
+    UIInput.popupKeyboard();
 }
 
 //重新计算按钮函数
@@ -311,6 +382,10 @@ function fnReAmount() {
     var badResult = $api.byId('badResult');
     goodResult.innerHTML = 0;
     badResult.innerHTML = 0;
+    UIInput.value({
+        msg: ''
+    });
+    UIInput.popupKeyboard();
 }
 
 //生成大于0的范围随机数字
