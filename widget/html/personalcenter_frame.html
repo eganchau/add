@@ -159,7 +159,7 @@
         <div class="option">
             <div class="icon icon-address"></div>
             <div class="title">收货地址</div>
-            <div class="arrow-panel">
+            <div class="arrow-panel" tapmode onclick="fnOpenSetAddressWin();">
                 <div class="text">管理我的收货地址</div>
             </div>
         </div>
@@ -170,6 +170,15 @@
 apiready = function() {
 
 };
+function fnOpenSetAddressWin() {
+    api.openWin({
+        name: 'setaddress',
+        url: './setaddress.html',
+        pageParam: {
+            name: 'test'
+        }
+    });
+}
 </script>
 
 </html>
