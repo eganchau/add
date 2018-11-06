@@ -209,7 +209,7 @@
         <img id="banner" class="banner" src="../image/default_rect.png">
     </header>
     <section id="list">
-<!--         <div class="ware ware-0">
+        <!-- <div class="ware ware-0">
             <div class="content">
                 <img class="thumbnail" src="../image/default_rect.png">
                 <div class="info">
@@ -257,7 +257,7 @@
 {{~it:value:index}}    
 <div class="ware ware-1">
     <div class="content">
-        <img onload="fnLoadImages(this)" data-url="{{=value.imgUrl}}" class="thumbnail" src="../image/default_rect.png">
+        <img onload="fnLoadImages(this)" data-url="{{=value.imgUrl}}" class="thumbnail" src="../image/default_rect.png" tapmode onclick="fnOpenWareWin();">
         <div class="info">
             <div class="name">{{=value.commodity_name}}</div>
             <div class="description">{{=value.description}}</div>
@@ -328,6 +328,8 @@ function fnUpdateWareList(data_, loadMore_) {
     var list = $api.byId('list');  
     var tempFn = doT.template($api.byId('template').innerHTML);  //编译模板函数
     var resultText = tempFn(data_);
+    wareId = data_.id
+    //console.log($api.jsonToStr(data_));
     if (loadMore_) {  //判断是否加载更多
         $api.append(list, resultText);
         if (data_.length < LIMIT) {
@@ -429,5 +431,15 @@ function fnLoadImages(el_) {
     }
 }
 
+var wareId
+function fnOpenWareWin() {
+    api.openWin({
+        name: 'ware',
+        url: './ware.html',
+        pageParam: {
+            wareId: wareId
+        }
+    });
+}
 </script>
 </html>
