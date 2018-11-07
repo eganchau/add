@@ -170,6 +170,8 @@
 apiready = function() {
 
 };
+
+//打开设置地址win页面
 function fnOpenSetAddressWin() {
     api.openWin({
         name: 'setaddress',
@@ -180,7 +182,8 @@ function fnOpenSetAddressWin() {
     });
 }
 
-//设置头像
+var userInfo = $api.getStorage('userInfo');
+//设置头像按钮函数
 function fnSetAvatar() {
     api.actionSheet({
         title: '选择图像方式',
@@ -205,9 +208,9 @@ function fnSetAvatar() {
                     saveToPhotoAlbum: false  //保存到相册
                 }, function(ret, err){ 
                     if(ret){
-                         alert(JSON.stringify(ret));
+                         fnUpdateUserAvatar(ret.data);  //上传头像文件
                     }else{
-                         alert(JSON.stringify(err));
+                         console.log(JSON.stringify(err));
                     }
                 });
              }
@@ -216,6 +219,133 @@ function fnSetAvatar() {
              alert( JSON.stringify( err ) );
         }
     });
+}
+
+
+//更新头像总函数
+function fnUpdateUserAvatar(avatarUrl_) {
+    
+    var filename = 'icon_' + userInfo.userId
+    fnCheckAvatarFileExist(filename);  //查询头像文件是否存在,存在则删除
+    fnUploadAtavar(filename, avatarUrl_)  //上传文件，然后更新数据库
+}
+
+//上传头像文件
+function fnUploadAtavar(filename_,avatarUrl_) {
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/file',
+        method: 'post',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
+        },
+        data: {
+            values: { 
+                filename: filename_
+            },
+            files: { 
+                file: avatarUrl_
+            }
+        }
+    },function(ret, err){
+        if (ret) {
+            //console.log(JSON.stringify(ret)); 
+            fnUpdateUserAvatarUrl( ret.url);
+        } else {
+            console.log( JSON.stringify( err ) );
+        }
+    });
+}
+
+//根据id值删除数据库中的头像文件
+function fnDeleteAvatarFile(id_) {
+    console.log(id_);
+    console.log(userInfo.id);
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/file/' + id_,
+        method: 'post',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833',
+            //"Authorization": userInfo.id  //apicloud
+        },
+        data: {
+            values: { 
+                "_method": "DELETE"
+            }
+        }
+    },function(ret, err){
+        if (ret) {
+            console.log('成功删除图片')
+            //console.log(JSON.stringify(ret)); 
+        } else {
+            console.log( JSON.stringify( err ) );
+        }
+    });
+}
+
+//查询头像文件是否存在数据库，存在返回id值
+function fnCheckAvatarFileExist(filename_) {
+    var params = {  //根据文档构造参数
+        fields: {},  //过滤字段；字段名: false 
+        where: {"name": filename_},   //条件
+        //skip: skip,   //页数
+        //limit: LIMIT  //城市数
+    }
+    params = $api.jsonToStr(params);  //对象转换成json
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/file?filter=' + params,
+        method: 'get',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
+        },
+        
+    },function(ret, err){
+        if (ret) {
+            console.log(JSON.stringify(ret));
+            if (ret.length == 1) {
+                fnDeleteAvatarFile(ret[0].id);
+            }
+            
+            //return ret[0].id
+
+        } else {
+            console.log( JSON.stringify( err ) );
+        }
+    });
+}
+
+//更新用户头像（设置数据库avatarUrl值）
+function fnUpdateUserAvatarUrl(avatarUrl_) {
+    userInfo = $api.getStorage('userInfo');    
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/user/' + userInfo.userId,
+        method: 'put',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833',
+            "Authorization": userInfo.id  //apicloud
+        },
+        data: {
+            values: { 
+                avatarUrl: avatarUrl_
+            }
+        }
+    },function(ret, err){
+        if (ret) {
+            fnUpdateUserAvatarUrl_local(ret.avatarUrl)
+        } else {
+            console.log( JSON.stringify( err ) );
+        }
+    });
+}
+
+//更新本地头像
+function fnUpdateUserAvatarUrl_local(url_) {
+    var icon = $api.byId('icon');
+    //icon.style.background = 'url(' +  + ')';
+    icon.style.background = 'url(' + url_ + ')';
 }
 
 </script>
