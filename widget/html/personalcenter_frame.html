@@ -167,9 +167,39 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
-apiready = function() {
+var userInfo = $api.getStorage('userInfo');
 
+apiready = function() {    
+    fnSetUserPersonalPageInfo(userInfo);
 };
+
+//
+function fnSetUserPersonalPageInfo(userInfo_) {
+    //console.log(JSON.stringify(userInfo_));
+    fnGetUserInfoDataBase(userInfo_.userId);
+}
+
+//查询user数据库信息
+function fnGetUserInfoDataBase(userId_) {
+    console.log(userId_);
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/user/' + userId_,
+        method: 'get',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833',
+            "Authorization": userInfo.id  //apicloud
+        }        
+    },function(ret, err){
+        if (ret) {            
+            var username = $api.byId('username');
+            username.innerHTML = ret.username;
+            fnUpdateUserAvatarUrl_local(ret.avatarUrl);
+        } else {
+            console.log( JSON.stringify( err ) );
+        }
+    });
+}
 
 //打开设置地址win页面
 function fnOpenSetAddressWin() {
@@ -182,8 +212,8 @@ function fnOpenSetAddressWin() {
     });
 }
 
-var userInfo = $api.getStorage('userInfo');
-//设置头像按钮函数
+
+//设置头像按钮函数(打开相机or相册选择图片)
 function fnSetAvatar() {
     api.actionSheet({
         title: '选择图像方式',
@@ -201,7 +231,7 @@ function fnSetAvatar() {
                     mediaValue: 'pic',   //媒体类型，pic或video
                     destinationType: 'url',  //返回数据类型, url或base64
                     allowEdit: true,  //允许编辑
-                    quality: 50,   //图片质量
+                    quality: 100,   //图片质量1~100
                     //videoQuality: 50,   //视频质量
                     targetWidth: 100,  //picture width
                     targetHeight: 100,   //picture height
@@ -223,8 +253,7 @@ function fnSetAvatar() {
 
 
 //更新头像总函数
-function fnUpdateUserAvatar(avatarUrl_) {
-    
+function fnUpdateUserAvatar(avatarUrl_) {    
     var filename = 'icon_' + userInfo.userId
     fnCheckAvatarFileExist(filename);  //查询头像文件是否存在,存在则删除
     fnUploadAtavar(filename, avatarUrl_)  //上传文件，然后更新数据库
@@ -344,8 +373,18 @@ function fnUpdateUserAvatarUrl(avatarUrl_) {
 //更新本地头像
 function fnUpdateUserAvatarUrl_local(url_) {
     var icon = $api.byId('icon');
-    //icon.style.background = 'url(' +  + ')';
-    icon.style.background = 'url(' + url_ + ')';
+    //把网络的头像图片做成缓存
+    api.imageCache({
+        url: url_
+    }, function(ret, err){
+        if( ret ){
+             //icon.style.background = 'url(' +  + ')';
+             icon.style.background = 'url(' + ret.url + ')';
+        }else{
+             alert( JSON.stringify( err ) );
+        }
+    });
+    
 }
 
 </script>
