@@ -182,8 +182,106 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 apiready = function() {
-
+    fnInitUIScorollPicture();  //调用滚动轮播图
+    fnGetWareDetail(api.pageParam.wareId);
 };
+
+//全局
+var UIScrollPicture;  
+//生成滚动轮播图
+function fnInitUIScorollPicture() {
+    var picture = $api.byId('picture');  //点位dom元素
+    picture.style.width = api.winWidth + 'px';  //设置dom元素的宽高与屏幕相同
+    picture.style.height = api.winHeight/2 + 'px';
+    var rect = $api.offset(picture);  //占位元素的大小与位置
+    UIScrollPicture = api.require('UIScrollPicture');
+    UIScrollPicture.open({
+        rect: {
+            x: rect.l,
+            y: rect.t,
+            w: rect.w,
+            h: rect.h
+        },
+        data: {
+            paths: [ //图片地址
+            'widget://image/default_rect.png', 
+            'widget://image/default_rect.png'
+
+            ],
+            captions: ['apicloud', 'apicloud', 'apicloud', 'apicloud']  //图片提示语
+        },
+        styles: {
+            caption: {
+                height: 35,
+                color: '#E0FFFF',
+                size: 13,
+                bgColor: '#696969',
+                position: 'bottom'
+            },
+            indicator: {
+                align: 'center',
+                color: '#FFFFFF',
+                activeColor: '#DA70D6'
+            }
+        },
+        placeholderImg: 'widget://image/default_rect.png',
+        contentMode: 'scaleToFill',
+        interval: 3,
+        fixedOn: api.frameName,
+        loop: true,
+        fixed: false   //是否滚动
+    }, function(ret, err){
+        if( ret ){
+             alert( JSON.stringify( ret ) );
+        }else{
+             alert( JSON.stringify( err ) );
+        }
+    });
+}
+
+//获取商品详情
+function fnGetWareDetail(wareId_) {
+    //console.log(wareId_);
+    var params = {
+        fields: {createdAt:false, updatedAt:false},
+        where: {
+            commodityId: wareId_
+        },
+        skip: 0,
+        limit: 20
+    }
+    params = $api.jsonToStr(params);
+
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/commodity_detail?filter='+ params,
+        method: 'get',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
+        }
+    },function(ret, err){
+        if (ret) {
+            var wareName = $api.byId('wareName');
+            wareName.innerHTML = ret[0].commodityId;  //把商品名称设置为返回值的commodityId值
+            fnUpdateWareInfo(ret);  //更新轮播图组件数据
+        } else {
+            alert( JSON.stringify( err ) );
+        }
+    });
+
+//更新轮播图组件数据
+function fnUpdateWareInfo(data_) {
+    UIScrollPicture.reloadData({
+        data: {
+            paths:data_[0].imgList ,
+            //captions: ['title1', 'title2', 'title3']
+        }
+    });
+    
+}
+
+}
+
 </script>
 
 </html>

@@ -257,7 +257,7 @@
 {{~it:value:index}}    
 <div class="ware ware-1">
     <div class="content">
-        <img onload="fnLoadImages(this)" data-url="{{=value.imgUrl}}" class="thumbnail" src="../image/default_rect.png" tapmode onclick="fnOpenWareWin();">
+        <img onload="fnLoadImages(this)" data-url="{{=value.imgUrl}}" class="thumbnail" src="../image/default_rect.png" tapmode onclick="fnOpenWareWin('{{=value.id}}');">
         <div class="info">
             <div class="name">{{=value.commodity_name}}</div>
             <div class="description">{{=value.description}}</div>
@@ -324,11 +324,12 @@ function initRefresh() {
 
 //更新商品列表信息
 function fnUpdateWareList(data_, loadMore_) {
-    //console.log($api.jsonToStr(data_));  //test: 后台输出数据 
+    console.log($api.jsonToStr(data_));  //test: 后台输出数据 
     var list = $api.byId('list');  
     var tempFn = doT.template($api.byId('template').innerHTML);  //编译模板函数
     var resultText = tempFn(data_);
-    wareId = data_.id
+    // wareId = data_[].id;
+    // console.log(wareId);
     //console.log($api.jsonToStr(data_));
     if (loadMore_) {  //判断是否加载更多
         $api.append(list, resultText);
@@ -432,12 +433,12 @@ function fnLoadImages(el_) {
 }
 
 var wareId
-function fnOpenWareWin() {
+function fnOpenWareWin(wareId_) {
     api.openWin({
         name: 'ware',
         url: './ware.html',
         pageParam: {
-            wareId: wareId
+            wareId: wareId_
         }
     });
 }
