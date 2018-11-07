@@ -128,7 +128,7 @@
 
 <body>
     <header>
-        <div class="icon-panel">
+        <div class="icon-panel" tapmode onclick="fnSetAvatar();">
             <div id="icon" class="icon"></div>
         </div>
         <div id="username" class="username">broad</div>
@@ -179,6 +179,45 @@ function fnOpenSetAddressWin() {
         }
     });
 }
+
+//设置头像
+function fnSetAvatar() {
+    api.actionSheet({
+        title: '选择图像方式',
+        cancelTitle: '取消',
+        destructiveTitle: '警告按钮',  //buttonIndex:1
+        buttons: ['拍照','相册','测试']  //buttonIndex: 2~4
+    }, function(ret, err){
+        if( ret ){
+             if (ret) {
+                var sourceType = [ "camera", "library", "album"];  //相机、图片库、相册（相册与图片库雷同）
+                api.getPicture({
+                    sourceType: sourceType[ret.buttonIndex - 2],  //减n选择数组中的元素
+                    //direction: front,  //前后摄像头选择(仅支持IOS,android需要手动选择前置) front、rear
+                    encodingType: 'png',  //返回图片类型，jpg或png
+                    mediaValue: 'pic',   //媒体类型，pic或video
+                    destinationType: 'url',  //返回数据类型, url或base64
+                    allowEdit: true,  //允许编辑
+                    quality: 50,   //图片质量
+                    //videoQuality: 50,   //视频质量
+                    targetWidth: 100,  //picture width
+                    targetHeight: 100,   //picture height
+                    saveToPhotoAlbum: false  //保存到相册
+                }, function(ret, err){ 
+                    if(ret){
+                         alert(JSON.stringify(ret));
+                    }else{
+                         alert(JSON.stringify(err));
+                    }
+                });
+             }
+             
+        }else{
+             alert( JSON.stringify( err ) );
+        }
+    });
+}
+
 </script>
 
 </html>
