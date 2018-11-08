@@ -125,17 +125,13 @@ function fnLogin() {
             }
         }
     }, function(ret, err) {
-        if (ret && ret.userId) {
-
-            
+        if (ret && ret.userId) {            
             $api.setStorage("userInfo", ret);  //登录成功把userInfo设置在本地缓存
-
             api.toast({
                 msg: '登录成功',  //登录消息提示
                 duration: 2000,
                 location: 'bottom'
             });
-
             //打开main页面
             api.openWin({
                 name: 'main',
@@ -145,19 +141,28 @@ function fnLogin() {
                 }
             });
         } else {
-            console.log(err.statusCode)
             if (err.statusCode == 0) {
-                alert('连接不到服务器, 请检查网络；')
-            }
+                api.toast({
+                    msg: '连接不到服务器, 请检查网络；',  //登录消息提示
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                return;
+            }            
             //var statusCode = JSON.stringify(err.statusCode)
             if (err.statusCode == 401) {
-                alert('账号或密码错！')
+                api.toast({
+                    msg: '账号或密码错！',  //登录消息提示
+                    duration: 3000,
+                    location: 'bottom'
+                });
                 username.outerHTML = username.outerHTML;  //原生js清空输入框
                 //password.outerHTML = password.outerHTML;  //清空密码
                 var pw = $api.byId('password');  //获取密码框对象 
                 $api.val(pw, '');   //api.val(le, 'val')：只有arg1时返回le的value；有arg2时: arg2设置为le的新value值;
+                return;
             } 
-            console.log('Unknow Error!')
+            console.log(err.statusCode)
             alert(JSON.stringify(err));  
         }
     }); 

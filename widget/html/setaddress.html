@@ -62,6 +62,7 @@
 <script type="text/javascript">
 apiready = function() {
     var header = $api.byId('header');
+    $api.fixStatusBar(header);  //状态栏自适应
     var headerH = $api.offset(header).h;
 
     api.openFrame({

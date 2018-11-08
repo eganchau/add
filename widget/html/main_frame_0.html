@@ -224,15 +224,17 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
-    apiready = function(){
-        fnInitUIInput();
-        fnCreateEqution();
-
-    };
 
 
+apiready = function(){
+    fnInitUIInput();
+    fnCreateEqution();
+
+};
 
 
+
+var UIInput;
 //监听输入框
 var number3_;
 function fnInitUIInput() {
@@ -323,7 +325,7 @@ function fnCreateEqution() {
 
 
 //判断算式结果
-var UIInput;
+
 
 function fnJudgeResult(){
 
