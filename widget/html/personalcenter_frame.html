@@ -131,7 +131,7 @@
         <div class="icon-panel" tapmode onclick="fnSetAvatar();">
             <div id="icon" class="icon"></div>
         </div>
-        <div id="username" class="username">broad</div>
+        <div id="username" class="username"></div>
         <div class="account-info">积分：0|余额：￥0</div>
     </header>
     <section>
@@ -167,21 +167,27 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
+//var
 var userInfo = $api.getStorage('userInfo');
+var icon = $api.byId('icon');
+var username = $api.byId('username');
 
-apiready = function() {    
+apiready = function() {
+    fnGetUserInfoDataBase(userInfo.userId);
+    icon.style.background = 'url(' + userInfo.avatarUrl + ')';   //设置头像
+    username.innerHTML = userInfo.username;  //设置用户名
     fnSetUserPersonalPageInfo(userInfo);
 };
 
 //
 function fnSetUserPersonalPageInfo(userInfo_) {
-    //console.log(JSON.stringify(userInfo_));
+    console.log(JSON.stringify(userInfo_));
     fnGetUserInfoDataBase(userInfo_.userId);
 }
 
 //查询user数据库信息
 function fnGetUserInfoDataBase(userId_) {
-    console.log(userId_);
+    //console.log(userId_);
     api.ajax({
         url: 'https://d.apicloud.com/mcm/api/user/' + userId_,
         method: 'get',
@@ -192,9 +198,11 @@ function fnGetUserInfoDataBase(userId_) {
         }        
     },function(ret, err){
         if (ret) {            
-            var username = $api.byId('username');
+            userInfo.username = ret.username;   //添加userInfo的用户名信息            
             username.innerHTML = ret.username;
-            fnUpdateUserAvatarUrl_local(ret.avatarUrl);
+            if (userInfo.avatarUrl == "") {
+                fnUpdateUserAvatarUrl_local(ret.avatarUrl);
+            }            
         } else {
             console.log( JSON.stringify( err ) );
         }
@@ -255,8 +263,8 @@ function fnSetAvatar() {
 //更新头像总函数
 function fnUpdateUserAvatar(avatarUrl_) {    
     var filename = 'icon_' + userInfo.userId
-    fnCheckAvatarFileExist(filename);  //查询头像文件是否存在,存在则删除
-    fnUploadAtavar(filename, avatarUrl_)  //上传文件，然后更新数据库
+    fnCheckAvatarFileExist(filename);  //查询头像文件是否存在,存在则fnDeleteAvatarFile(id_)删除
+    fnUploadAtavar(filename, avatarUrl_)  //上传文件，然后fnUpdateUserAvatarUrl(avatarUrl_)更新数据库
 }
 
 //上传头像文件
@@ -328,17 +336,13 @@ function fnCheckAvatarFileExist(filename_) {
         headers: {
             "X-APICloud-AppId": "A6084933293707",
             "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833'
-        },
-        
+        }        
     },function(ret, err){
         if (ret) {
-            console.log(JSON.stringify(ret));
+            //console.log(JSON.stringify(ret));
             if (ret.length == 1) {
                 fnDeleteAvatarFile(ret[0].id);
             }
-            
-            //return ret[0].id
-
         } else {
             console.log( JSON.stringify( err ) );
         }
@@ -372,19 +376,27 @@ function fnUpdateUserAvatarUrl(avatarUrl_) {
 
 //更新本地头像
 function fnUpdateUserAvatarUrl_local(url_) {
-    var icon = $api.byId('icon');
     //把网络的头像图片做成缓存
     api.imageCache({
         url: url_
     }, function(ret, err){
         if( ret ){
+             fnUpdateUserInfoLocal(ret.url);  //更新本地userInfo信息
              //icon.style.background = 'url(' +  + ')';
              icon.style.background = 'url(' + ret.url + ')';
         }else{
              alert( JSON.stringify( err ) );
         }
-    });
-    
+    });    
+}
+
+//更新本地userInfo信息（加入本地缓存图片地址url）
+function fnUpdateUserInfoLocal(url_) {
+    //userInfo.avatarUrl = ret.avatarUrl;
+    userInfo.avatarUrl = url_;
+    $api.setStorage("userInfo", userInfo);
+    userInfo = $api.getStorage('userInfo');
+    console.log(JSON.stringify(userInfo));
 }
 
 </script>
