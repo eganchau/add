@@ -255,14 +255,12 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
-
-
 apiready = function(){
     fnInitUIInput();
     fnCreateEqution();
-
 };
 
+//打开滑块(测试)
 function fnOpenUISlider() {
     var uislider = api.require('UISlider');
     //最小数
@@ -449,17 +447,12 @@ function fnCreateEqution() {
 
 
 //判断算式结果
-
-
 function fnJudgeResult(){
-
-
     var symbl = $api.byId('symbl');//表面符号
     var number1 = $api.byId('number1').innerHTML;
     var number2 = $api.byId('number2').innerHTML;
     var goodResult = $api.byId('goodResult');
     var badResult = $api.byId('badResult');
-
     
     //计算结果
     if (symbl.innerHTML == '-') {
@@ -467,8 +460,6 @@ function fnJudgeResult(){
     } else {
         var result = parseInt(number1) + parseInt(number2);
     }
-    
-
 
     //判断结果
     if (typeof number3_ != 'number' || isNaN(number3_)) {
@@ -489,8 +480,7 @@ function fnJudgeResult(){
         //number3.outerHTML=number3.outerHTML; //清空文本框
         //number3.focus();  //h5聚焦方法
         fnClearResult();
-    }
-    
+    }    
 }
 
 //清空答案框并弹出键盘
