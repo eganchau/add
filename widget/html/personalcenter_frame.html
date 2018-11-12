@@ -173,41 +173,9 @@ var icon = $api.byId('icon');
 var username = $api.byId('username');
 
 apiready = function() {
-    fnGetUserInfoDataBase(userInfo.userId);
     icon.style.background = 'url(' + userInfo.avatarUrl + ')';   //设置头像
     username.innerHTML = userInfo.username;  //设置用户名
-    fnSetUserPersonalPageInfo(userInfo);
 };
-
-//
-function fnSetUserPersonalPageInfo(userInfo_) {
-    console.log(JSON.stringify(userInfo_));
-    fnGetUserInfoDataBase(userInfo_.userId);
-}
-
-//查询user数据库信息
-function fnGetUserInfoDataBase(userId_) {
-    //console.log(userId_);
-    api.ajax({
-        url: 'https://d.apicloud.com/mcm/api/user/' + userId_,
-        method: 'get',
-        headers: {
-            "X-APICloud-AppId": "A6084933293707",
-            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833',
-            "Authorization": userInfo.id  //apicloud
-        }        
-    },function(ret, err){
-        if (ret) {            
-            userInfo.username = ret.username;   //添加userInfo的用户名信息            
-            username.innerHTML = ret.username;
-            if (userInfo.avatarUrl == "") {
-                fnUpdateUserAvatarUrl_local(ret.avatarUrl);
-            }            
-        } else {
-            console.log( JSON.stringify( err ) );
-        }
-    });
-}
 
 //打开设置地址win页面
 function fnOpenSetAddressWin() {
@@ -219,7 +187,6 @@ function fnOpenSetAddressWin() {
         }
     });
 }
-
 
 //设置头像按钮函数(打开相机or相册选择图片)
 function fnSetAvatar() {
@@ -258,7 +225,6 @@ function fnSetAvatar() {
         }
     });
 }
-
 
 //更新头像总函数
 function fnUpdateUserAvatar(avatarUrl_) {    
@@ -392,11 +358,11 @@ function fnUpdateUserAvatarUrl_local(url_) {
 
 //更新本地userInfo信息（加入本地缓存图片地址url）
 function fnUpdateUserInfoLocal(url_) {
-    //userInfo.avatarUrl = ret.avatarUrl;
     userInfo.avatarUrl = url_;
     $api.setStorage("userInfo", userInfo);
     userInfo = $api.getStorage('userInfo');
-    console.log(JSON.stringify(userInfo));
+    console.log('成功更新头像，并设置userInfo: ' + userInfo);
+    //console.log(JSON.stringify(userInfo));
 }
 
 </script>

@@ -114,6 +114,8 @@
 
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
+var userInfo = $api.getStorage('userInfo');
+
 apiready = function(){    
     //变量  
     //alert(api.fsDir);  //输出文件目录（测试）
@@ -133,7 +135,7 @@ apiready = function(){
         frameName: 'main_frame_1',
         script: 'fnGetCommodityList();'
     });
-
+    fnGetUserInfoDataBase(userInfo.userId);  //查询user数据库信息
     var currentCity = $api.getStorage('currentCity');
     if (!currentCity) {
         console.log('miss currentCity!');
@@ -147,6 +149,48 @@ apiready = function(){
         msg: '用户已登录',
         duration: 2000,
         location: 'middle'
+    });
+
+    
+}
+
+//查询user数据库信息(userInfo添加头像url)
+function fnGetUserInfoDataBase(userId_) {
+    //console.log(userId_);
+    api.ajax({
+        url: 'https://d.apicloud.com/mcm/api/user/' + userId_,
+        method: 'get',
+        headers: {
+            "X-APICloud-AppId": "A6084933293707",
+            "X-APICloud-AppKey": '9f32f538e1089612d96d995af828f65b66978edd.1539670980833',
+            "Authorization": userInfo.id  //apicloud
+        }        
+    },function(ret, err){
+        if (ret) {            
+            userInfo.username = ret.username;   //添加userInfo的用户名信息 
+            fnCacheAvatarImage(ret.avatarUrl);   //缓存头像                 
+        } else {
+            console.log( JSON.stringify( err ) );
+        }
+    });
+}
+
+//缓存头像
+function fnCacheAvatarImage(url_) {
+    if (url_ == '') {
+        console.log('用户未设置头像！')
+        return;
+    }
+    api.imageCache({
+        url: url_
+    }, function(ret, err){
+        if( ret ){
+             userInfo.avatarUrl = ret.url;
+             console.log('头像成功本地缓存: '+ userInfo.avatarUrl);
+             $api.setStorage('userInfo', userInfo);
+        }else{
+             alert( JSON.stringify( err ) );
+        }
     });
 }
 
