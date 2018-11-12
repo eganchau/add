@@ -16,8 +16,35 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 apiready = function(){
-
+	var map = api.require('bMap');
+	map.show();
+    //fnOpenbMap();
 };
+
+function fnOpenbMap() {
+	var map = api.require('bMap');
+	map.open({
+	    rect: {
+	        x: 0,
+	        y: 0,
+	        w: 320,
+	        h: 300
+	    },
+	    center: {
+	        lon: 116.4021310000,
+	        lat: 39.9994480000
+	    },
+	    zoomLevel: 10,
+	    showUserLocation: true,
+	    fixedOn: api.frameName,
+	    fixed: true
+	}, function(ret) {
+	    if (ret.status) {
+	        alert('地图打开成功');
+	    }
+	});
+	map.show();
+}
 
 </script>
 </html>

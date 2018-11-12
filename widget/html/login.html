@@ -49,7 +49,7 @@ apiready = function() {
     fnInitEventListenner(); //监听退出事件
 
     var header = $api.byId("header");  //使用id获取变量值
-    $api.fixStatusBar(header);  //使用沉浸式（消除状顶部态栏-）
+    $api.fixStatusBar(header);  //状态栏自适应
     var headerH = $api.offset(header).h;  //获取header的高度
 
     api.openFrame({
