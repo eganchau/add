@@ -147,35 +147,6 @@
         border-radius:8px 8px 8px 8px;
     }
 
-    body .slider {
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-orient: horizontal; /*盒子内元素排列为平行*/
-        -webkit-flex-flow: row;  /*流式：即顺序排列*/
-        flex-flow: row;
-        position: relative;  /*非固定元素*/
-        top:25px;
-        width: 100%;
-        height: auto;
-        background-color: #993399;
-        border-radius: 15px 15px 15px 15px;
-    }
-    body .slider div { 
-        -webkit-box-flex: 1;
-        -webkit-flex: 1;
-        flex: 1;
-
-        width: 15%;
-        height: 50px;
-        background: #993399;
-        margin: 1px 3px;
-        font-size: 21px;color:#fff;
-        text-align: center;
-        line-height: 40px;
-        border-radius:8px 8px 8px 8px;
-    }
-
     body .submit {
         display: -webkit-box;
         display: -webkit-flex;
@@ -243,10 +214,6 @@
         <div>正确数：</div><div id="goodResult">0</div>
         <div>错误数：</div><div id="badResult">0</div>
     </div>
-    
-    <div class="slider" tapmode onclick="fnOpenUISlider();">
-        <div id="sliderTest">Slider</div>
-    </div>
 
     <div class="submit">
         <div tapmode="selected" onclick="fnReAmount()">重新出题</div>
@@ -258,10 +225,13 @@
 apiready = function(){
     fnInitUIInput();
     fnCreateEqution();
+    fnOpenUISlider();
 };
 
 //打开滑块(测试)
 function fnOpenUISlider() {
+    var slider = $api.byId('slider');
+    var rect = $api.offset(slider);
     var uislider = api.require('UISlider');
     //最小数滑块
     uislider.open({
@@ -269,7 +239,7 @@ function fnOpenUISlider() {
         orientation: 'horizontal',  //平行的滑块方向
         rect: {  //位置与区域
             x: 0,
-            y: api.frameHeight/2,
+            y: api.frameHeight / 2,
             size: api.frameWidth -2
         },
         bubble: {  //提示气泡
@@ -281,15 +251,15 @@ function fnOpenUISlider() {
             color: '#888',
             bg: 'widget://res/slider/bubble.png',  //
             prefix: '最小数',
-            suffix: '摄氏度'
+            suffix: '最小数'
         },
         handler: {
-            w: 9,
-            h: 12,
+            w: 26,
+            h: 26,
             bg: 'widget://res/slider/handler.png'  //滑块img
         },
         bar: {
-            h: 6,
+            h: 24,
             bg: 'widget://res/slider/background.png',  //滑条img
             active: 'widget://res/slider/bar-active.png'  //滑条img(已选择)
         },
@@ -326,7 +296,7 @@ function fnOpenUISlider() {
             color: '#888',
             bg: 'widget://res/slider/bubble.png',
             prefix: '最大数',
-            suffix: '摄氏度'
+            suffix: '最大数'
         },
         handler: {
             w: 9,

@@ -98,7 +98,7 @@
 	<header id="header">
         <div class="left" tapmode onclick="fnOpenCitySelectorFrame()">
             <div id="arrow" class="arrow"></div>
-            <div id="cityText" class="city-text">广州</div>
+            <div id="cityText" class="city-text">选择城市</div>
         </div>
 		<div class="center">app技术杂货铺</div>
 		<div class="right" tapmode onclick="fnOpenPersonalCenter()"></div>
@@ -115,6 +115,7 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 var userInfo = $api.getStorage('userInfo');
+var map;
 
 apiready = function(){    
     //变量  
@@ -126,8 +127,6 @@ apiready = function(){
     //全局变量
     navH = $api.offset(nav).h;
     headerH = $api.offset(header).h;  //获取header的高度
-    var totalH = headerH + navH;
-    $api.setStorage('totalH', totalH);   //把总H存下来，UUInput控件要用；
     menus = $api.domAll(nav, '.menu'); //dom元素选择器; arg1: 父元素 arg2: 选择器    
 
     //fun
@@ -144,16 +143,68 @@ apiready = function(){
         fnOpenCitySelectorFrame();
         return;
     } else {
-        fnOpenFrameGroup();
+        fnGetLocationByBMap(currentCity);  //较准城市定位
+        fnOpenFrameGroup();  //打开frame组
     }
 
-    api.toast({
+    api.toast({  //登录成功提示
         msg: '用户已登录',
         duration: 2000,
         location: 'middle'
-    });
+    });    
+}
 
-    
+//较准城市定位
+function fnGetLocationByBMap(currentCity_) {
+    map = api.require('bMap');
+    map.getLocation({   //只取城市所以可以定位1000m精度 
+        accuracy: '1000m',  //定准精度，越大定准速度越快 （callback里也有精度返回）
+        autoStop: true,  //自动停止，若为false 则按精度手动停止定位
+        filter: 1000  //移动多少米后，重新定位
+    }, function(ret, err) {
+        if (ret.status) {
+            fnGetCityName(ret, currentCity_);
+            //console.log(JSON.stringify(ret));
+        } else {
+            console.log(err.code);
+        }
+    });
+}
+
+//
+function fnGetCityName(ret_, currentCity_) {
+    map.getNameFromCoords({
+        lon: ret_.lon,
+        lat: ret_.lat
+    }, function(ret, err) {
+        if (ret.status) {
+            var city = ret['city'];
+            if (currentCity_ != city) {
+                console.log('当前城市定位不准确 ！');
+                api.confirm({
+                    title: '当前城市定位不准确',
+                    msg: '当前定位城市为：'+ ret['city'] ,
+                    buttons: ['切换', '自定义城市']
+                }, function(ret, err){
+                    if( ret ){
+                        //console.log(ret.buttonIndex);  //输出buttonIndex                        
+                        if (ret.buttonIndex == 2) {
+                            fnOpenCitySelectorFrame();
+                        } else {
+                            var cityText = $api.byId('cityText');
+                            cityText.innerHTML = city;
+                        }
+                    }else{
+                        console.log($api.jsonToStr(err));
+                    }
+                });
+            } else {                        
+                console.log('城市定位一致！')
+                var cityText = $api.byId('cityText');
+                cityText.innerHTML = city;
+            }
+        }
+    });
 }
 
 //查询user数据库信息(userInfo添加头像url)
@@ -188,7 +239,7 @@ function fnCacheAvatarImage(url_) {
     }, function(ret, err){
         if( ret ){
              userInfo.avatarUrl = ret.url;
-             console.log('头像成功本地缓存: '+ userInfo.avatarUrl);
+             //console.log('头像成功本地缓存: '+ userInfo.avatarUrl);
              $api.setStorage('userInfo', userInfo);
         }else{
              alert( JSON.stringify( err ) );
@@ -220,7 +271,7 @@ function fnOpenFrameGroup() {
              w: 'auto', 
              h: 'auto'
         },
-        index: 2,  //默认打开第x frame页面
+        index: 0,  //默认打开第x frame页面
         frames: frameList//调用列表变量
     }, function(ret, err){
         if( ret ){  //ret={"index":1, "name":"frame2"}             
@@ -228,9 +279,6 @@ function fnOpenFrameGroup() {
         }
     });
 }
-
-
-
 
 //点击菜单切换frame
 function fnSetNavMenuIndex(index_) {
@@ -306,7 +354,9 @@ function fnInitEventListenner() {
             buttons: ['确定', '取消']
         }, function(ret, err) {
             if (ret.buttonIndex == 1) {
-                api.closeWidget();  //关闭应用
+                api.closeWidget({
+                    silent: true
+                });  //关闭应用
             }
         });
     });
