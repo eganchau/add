@@ -48,7 +48,7 @@
         border-radius:8px 8px 8px 8px;
     }
     body .eqution input {
-        width: 80%;
+        width: 100%;
         height: 70px;
         border: 1px;
         border-color: red;
@@ -263,37 +263,37 @@ apiready = function(){
 //打开滑块(测试)
 function fnOpenUISlider() {
     var uislider = api.require('UISlider');
-    //最小数
+    //最小数滑块
     uislider.open({
         animation: true,
-        orientation: 'horizontal',
-        rect: {
+        orientation: 'horizontal',  //平行的滑块方向
+        rect: {  //位置与区域
             x: 0,
             y: api.frameHeight/2,
             size: api.frameWidth -2
         },
-        bubble: {
+        bubble: {  //提示气泡
             direction: 'top',
             state: 'always',
             w: 80,
             h: 30,
             size: 14,
             color: '#888',
-            bg: 'widget://res/slider/bubble.png',
+            bg: 'widget://res/slider/bubble.png',  //
             prefix: '最小数',
             suffix: '摄氏度'
         },
         handler: {
             w: 9,
             h: 12,
-            bg: 'widget://res/slider/handler.png'
+            bg: 'widget://res/slider/handler.png'  //滑块img
         },
         bar: {
             h: 6,
-            bg: 'widget://res/slider/background.png',
-            active: 'widget://res/slider/bar-active.png'
+            bg: 'widget://res/slider/background.png',  //滑条img
+            active: 'widget://res/slider/bar-active.png'  //滑条img(已选择)
         },
-        value: {
+        value: {  //滑条val范围与offset以及init value
             min: 16,
             max: 32,
             step: 0.5,

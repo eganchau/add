@@ -15,36 +15,376 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
-apiready = function(){
-	var map = api.require('bMap');
-	map.show();
-    //fnOpenbMap();
-};
+    var map,UIInput,dialogBox;  //api模块
+    var cityMsg;  //接收城市信息
+    /**
+     * api初始化
+     */
+    apiready = function(){
+        map = api.require('bMap');
+        UIInput = api.require('UIInput');
+        dialogBox = api.require('dialogBox');
+        //判断系统机型，进行BMAP初始化
+        if(api.systemType == "ios"){
+            map.initMapSDK(function(ret) {
+                if (ret.status) {
+                	setIosCompass(); //ios指南针
+                    console.log('ios版本地图初始化成功，可以从百度地图服务器检索信息了！');
+                }
+            });
+        } else {
+        	console.log('android版本地图！');
+        }
+        fnCheckLocationServices();  //权限
+    	fnSetScale();  //标尺
+    	fnGetLocation(); //获得定位并打开地图，调用： fnOpenMapWithLocation()
+    	console.log()
+    	setTimeout("fnInitViewInput();", 1000);  //延时关闭应用
+    	
+    	//console.log($api.jsonToStr(r));
+    	//fnOpenMapWithLocation(cityMsg.lon, cityMsg.lat);  //根据cityMsg的lon及lat定位打开地图
+        //fnInitData();
+    };
 
-function fnOpenbMap() {
-	var map = api.require('bMap');
-	map.open({
-	    rect: {
-	        x: 0,
-	        y: 0,
-	        w: 320,
-	        h: 300
-	    },
-	    center: {
-	        lon: 116.4021310000,
-	        lat: 39.9994480000
-	    },
-	    zoomLevel: 10,
-	    showUserLocation: true,
-	    fixedOn: api.frameName,
-	    fixed: true
-	}, function(ret) {
-	    if (ret.status) {
-	        alert('地图打开成功');
-	    }
-	});
-	map.show();
-}
+    //根据定位打开地图
+    function fnOpenMapWithLocation(ret) {
+    	var lon = ret.lon   //必须写变量接收数值，否则百度地图蓝屏
+    	var lat = ret.lat
+    	map.open({
+            rect: {
+                x: 0,
+                y: api.pageParam.headerH,
+                w: api.frameWidth,
+                h: api.frameHeight - 40
+            },
+            center: {
+                lon: lon,  //113.46887
+                lat: lat //23.142165
+            },
+            zoomLevel: 18,
+            showUserLocation: true,
+            fixedOn: api.frameName,
+            fixed: true
+        }, function(ret) {
+            if (ret.status) {
+                console.log('地图打开成功');
+            }
+        });
 
+        //获取城市名 生成全局变量start
+        map.getNameFromCoords({
+            lon: ret.lon,
+            lat: ret.lat
+        }, function(ret, err) {
+            if (ret.status) {
+                start = ret;
+                start['city'] = ret.city;
+            };
+        });
+    }
+
+    //获得定位并打开地图，调用： fnOpenMapWithLocation() 
+    function fnGetLocation() {
+    	map.getLocation({
+		    accuracy: '100m',
+		    autoStop: true,
+		    filter: 1
+		}, function(ret, err) {
+		    if (ret.status) {
+		    	fnOpenMapWithLocation(ret);
+		        //console.log(JSON.stringify(ret));
+		    } else {
+		        console.log(err.code);
+		    }
+		});
+    }
+
+    //设置标尺
+    function fnSetScale() {
+    	map.setScaleBar({
+		    show: true,
+		    position: {
+		        x: 100,
+		        y: 100
+		    }
+		});
+    }
+
+    
+    
+
+	//初始化Input视图
+    function fnInitViewInput(){
+        var rectH = $api.getStorage('totalH');
+        console.log(rectH);
+        UIInput.open({
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.frameWidth,
+                h: 40
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 14,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '请输入目的地',
+            keyboardType: 'search',
+            fixedOn: api.frameName
+        }, function(ret) {
+            if (ret.eventType == 'search') {
+                UIInput.value(function(ret) {
+                    if (ret) {
+                        fnSearch(ret.msg);
+                    }
+                });
+            };
+        });
+    };
+    
+    /**
+     * 搜索关键字
+     * 
+     * @param {String} key 关键字
+     */
+    function fnSearch(key){
+        //百度地图，搜索关键字
+        map.searchInCity({
+            city: start.city,
+            keyword: key,
+            pageCapacity: 50
+        }, function(ret, err) {
+            if (ret.status) {
+                fnInitViewList(ret.results);
+            } else {
+                console.log(JSON.stringify(err));
+            }
+        });
+    };
+    
+    /**
+     * 初始化选择列表
+     * 
+     * @param {Array} data  列表数据
+     */
+    function fnInitViewList(data){
+        //整理dialogBox所需数据
+        var titles = new Array();
+        for (var i = 0,len = data.length; i < len; i++) {
+            var item = {
+                text:data[i].name+'('+data[i].address+')'
+            };
+            titles.push(item);
+        };
+        
+        //打开dialogBox 选择列表
+        dialogBox.scene({
+            rect: {
+                w: 280,
+                h: 400
+            },
+            texts: {
+                title: '选择目的地',
+            },
+            styles: {
+                bg: '#fff',
+                title: {
+                    bg: '#aaa',
+                    h: 44,
+                    size: 14,
+                    color: '#000'
+                },
+                content: {
+                    color: '#111',
+                    size: 12
+                },
+                cell: {
+                    bg: '#fff',
+                    h: 48,
+                    text: {
+                        color: '#636363',
+                        size: 13
+                    },
+                    icon: {
+                        marginL: 15,
+                        marginT: 9,
+                        w: 30,
+                        h: 30,
+                        corner: 2
+                    }
+                }
+            },
+            optionDatas: titles
+        }, function(ret, err) {
+            if (ret) {
+                if(ret.eventType == "cell"){
+                    var end = data[ret.index];
+                    //关闭列表选择视图
+                    dialogBox.close({
+                        dialogName: 'scene'
+                    });
+                    
+                    //改变地图中心点坐标为所选择的地点的坐标
+                    map.setCenter({
+                        coords: {
+                            lon: end.lon,
+                            lat: end.lat
+                        },
+                        animation: true
+                    });
+                    //标记目标地点之前先清除
+                    map.removeAnnotations({ids: [1]});
+                    //标记目标地点
+                    map.addAnnotations({
+                        annotations: [{
+                            id: 1,
+                            lon: end.lon,
+                            lat: end.lat
+                        }],
+                        draggable: true
+                    }, function(ret) {
+                        if (ret) {
+                            //如果点击标记
+                            if(ret.eventType == "click"){
+                                //弹出选择框
+                                dialogBox.evaluation({
+                                    styles: {
+                                        bg: '#fff',
+                                        w: 300,
+                                        title: {
+                                            marginT: 20,
+                                            size: 15,
+                                            color: '#000',
+                                            bold: true
+                                        },
+                                        content: {
+                                            marginT: 20,
+                                            color: '#111',
+                                            size: 12
+                                        },
+                                        buttons: [{
+                                            marginB: 0,
+                                            marginL: 0,
+                                            w: 300,
+                                            h: 35,
+                                            bg: '#fff',
+                                            color: '#007FFF',
+                                            size: 12
+                                        }, {
+                                            marginB: 0,
+                                            marginL: 0,
+                                            w: 300,
+                                            h: 35,
+                                            bg: '#fff',
+                                            color: '#007FFF',
+                                            size: 12
+                                        }]
+                                    },
+                                    texts: {
+                                        title: end.name,
+                                        content: end.address,
+                                        buttons: [{
+                                            text: '查询路线'
+                                        }, {
+                                            text: '放弃查询'
+                                        }]
+                                    }
+                                }, function(ret, err) {
+                                    if (ret) {
+                                        //如果选择"查询路线"
+                                        if(ret.index == 0){
+                                            //关闭选择框视图
+                                            dialogBox.close({
+                                                dialogName: 'evaluation'
+                                            });
+                                            //地图中心点切回起点
+                                            map.setCenter({
+                                                coords: {
+                                                    lon: start.lon,
+                                                    lat: start.lat
+                                                },
+                                                animation: true
+                                            });
+                                            //搜索路线
+                                            map.searchRoute({
+                                                id: 1,
+                                                type: 'drive',
+                                                policy: 'ecar_fee_first',
+                                                start: {
+                                                    lon: start.lon,
+                                                    lat: start.lat
+                                                },
+                                                end: {
+                                                    lon: end.lon,
+                                                    lat: end.lat
+                                                }
+                                            }, function(ret, err) {
+                                                if (ret.status) {
+                                                    //绘制线路前先清除
+                                                    map.removeRoute({ids: [1]});
+                                                    //绘制线路图
+                                                    map.drawRoute({
+                                                        id: 1,
+                                                        autoresizing: false,
+                                                        index: 0,
+                                                        styles: {
+                                                            start: {},
+                                                            end: {}
+                                                        }
+                                                    }, function(ret) {
+                                                        console.log({ msg: JSON.stringify(ret) });
+                                                    });
+                                                } else {
+                                                    console.log({ msg: JSON.stringify(err) });
+                                                }
+                                            });
+                                            //选择放弃
+                                        }else if(ret.index == 1){
+                                            //关闭选择框视图
+                                            dialogBox.close({
+                                                dialogName: 'evaluation'
+                                            });
+                                        }
+                                    } else {
+                                        console.log(JSON.stringify(err));
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            } else {
+                console.log(JSON.stringify(err));
+            }
+        });
+    }
+
+    //查询权限
+    function fnCheckLocationServices() {
+    	map.getLocationServices(function(ret, err) {
+		    if (ret.enable) {
+		    	console.log('已有定位功能权限；');
+		        //console.log(JSON.stringify(ret));
+		    } else {
+		        console.log("未开启定位功能！");
+		    }
+		});
+    }
+
+    //ios指南针
+    function setIosCompass() {
+    	map.setCompass({
+		    position: {
+		        x: 100,
+		        y: 100
+		    }
+		});
+    }
 </script>
 </html>

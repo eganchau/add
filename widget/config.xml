@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget id="A6084933293707"  version="0.0.1">
     <name>add</name>
-    <description>
-        dev by egan to apicloud.
-    </description>
+    <description>dev by egan to apicloud.</description>
     <author email="240449548@qq.com" href="http://www.apicloud.com">
         Developer
     </author>
-    <content src="index.html" />
-    
+    <content src="index.html" />   
     
     <preference name="pageBounce" value="false"/>
 	<preference name="appBackground" value="rgba(0,0,0,0.0)"/>

@@ -148,6 +148,7 @@
 <script type="text/javascript">
 apiready = function() {
     var header = $api.byId("header");  //使用id获取变量值
+    $api.fixStatusBar(header);
     var headerH = $api.offset(header).h;  //获取header的高度
     api.openFrame({
         name: 'ware_frame',

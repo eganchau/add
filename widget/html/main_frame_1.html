@@ -326,7 +326,7 @@ function initRefresh() {
 
 //更新商品列表信息
 function fnUpdateWareList(data_, loadMore_) {
-    console.log($api.jsonToStr(data_));  //test: 后台输出数据 
+    //console.log($api.jsonToStr(data_));  //test: 后台输出数据 
     var list = $api.byId('list');  
     var tempFn = doT.template($api.byId('template').innerHTML);  //编译模板函数
     var resultText = tempFn(data_);
@@ -425,7 +425,7 @@ function fnLoadImages(el_) {
             if( ret ){
                  el_.src = ret.url;  //ret.url是本地缓存图片的地址
                  //console.log(ret.url);
-                 console.log('图片成功本地缓存');
+                 //console.log('图片成功本地缓存');
                  $api.attr(el_, 'data-url', '');  //设置标签的data-url属性值为''(空值)
             }else{
                  alert( JSON.stringify( err ) );
