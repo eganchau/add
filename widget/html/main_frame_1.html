@@ -270,11 +270,11 @@
             </div>
         </div>
         <div class="control">
-            <div class="panel">
-                <img class="minus" src="../image/minus.png">
-                <div class="count">{{=value.amount}}</div>
+            <div class="panel" id="panel_{{=value.id}}">
+                <img class="minus" src="../image/minus.png" tapmode onclick="fnMinus('{{=value.id}}');">
+                <div class="count" id="count_{{=value.id}}">0</div>
             </div>
-            <img class="add" src="../image/add.png ">
+            <img class="add" src="../image/add.png" tapmode onclick="fnAdd('{{=value.id}}');">
         </div>
     </div>
 </div>
@@ -284,13 +284,81 @@
 <script type="text/javascript" src="../script/doT.min.js"></script>  <!-- 引用doT框架 -->
 <script type="text/javascript">
 apiready = function(){
+
+    
     var data = $api.getStorage('commodityList');  //读取local storage
     initListener();  //监听上拉
     initRefresh();  //下拉刷新
     fnUpdateWareList(data);  //更新商品列表数据
     fnUpdateBanner();  //更新banner图
-    
+    fnOpenShoppingCart();  //打开购物车
 };
+
+
+//
+function fnMinus(wareId_) {
+    event.stopPropagation();  //阻止事件重叠（区域点击重叠）
+    var count = $api.byId('count_' +  wareId_);
+    var panel = $api.byId('panel_' +  wareId_);
+    var countNumber = parseInt(count.innerHTML);
+    countNumber -= 1;
+    count.innerHTML = countNumber;
+    //js简写： if 符合条件 则  panel.style.display = block 否则panel.style.display=none;
+    panel.style.display = (countNumber > 0) ? 'block' : 'none';  
+    api.sendEvent({  //发送事件并传值
+        name: 'updateShoppingCart',
+        extra: {
+            wareId: wareId_,   //两个值为数据库shoppingCart表的字段
+            wareCount: countNumber
+        }
+    }); 
+}
+function fnAdd(wareId_) {
+    event.stopPropagation();  //阻止事件重叠（区域点击重叠）
+    var count = $api.byId('count_' +  wareId_);
+    var panel = $api.byId('panel_' +  wareId_);
+    var countNumber = parseInt(count.innerHTML);
+    countNumber += 1;
+    count.innerHTML = countNumber;
+    //js简写： if 符合条件 则  panel.style.display = block 否则panel.style.display=none;
+    panel.style.display = (countNumber > 0) ? 'block' : 'none';     
+    api.sendEvent({  //发送事件并传值 在购物车页面监听事件
+        name: 'updateShoppingCart',
+        extra: {
+            wareId: wareId_,   //两个值为数据库shoppingCart表的字段
+            wareCount: countNumber
+        }
+    });
+}
+
+
+//打开购物车
+function fnOpenShoppingCart() {
+    api.openFrame({
+        name: 'minicart_frame',
+        url: './minicart_frame.html',
+        rect: {
+            x: 0,
+            y: api.winHeight/2 + 130,
+            w: 150,
+            h: 34
+        },
+        pageParam: {
+            name: 'test'
+        },
+        bounces: false,
+        bgColor: 'rgba(0,0,0,0)',
+        vScrollBarEnabled: false,  //垂直滚动条
+        hScrollBarEnabled: false   //更行滚动条
+    });
+    console.log('已打开购物车');
+
+    //把minicart_frame置顶；参数2不填写的话，会对所有的页面生效
+    api.bringFrameToFront({
+        from: 'minicart_frame',
+        to: 'main_frame_1'
+    });
+}
 
 //上拉
 function initListener() {

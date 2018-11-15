@@ -12,9 +12,10 @@
 <body>   
 </body>
 <script type="text/javascript" src="./script/api.js"></script>
+<script type="text/javascript" src="./script/db.js"></script>
 <script type="text/javascript">
 apiready = function(){
-
+    initDatabase();
     init();
     fnGetCommodityList();
     var userInfo = $api.getStorage('userInfo');
@@ -41,9 +42,12 @@ apiready = function(){
     }    
 };
 
-function init() {
+function initDatabase() {
+    $db.open();
+    console.log('database save on :' + api.fsDir);  //输出本地缓存目录
+}
 
-    
+function init() {   
 
     var commodityList = $api.getStorage('commodityList');
     if (!commodityList) {

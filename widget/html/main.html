@@ -146,13 +146,15 @@ apiready = function(){
         fnGetLocationByBMap(currentCity);  //较准城市定位
         fnOpenFrameGroup();  //打开frame组
     }
-
+    
     api.toast({  //登录成功提示
         msg: '用户已登录',
         duration: 2000,
         location: 'middle'
     });    
 }
+
+
 
 //较准城市定位
 function fnGetLocationByBMap(currentCity_) {
@@ -171,9 +173,9 @@ function fnGetLocationByBMap(currentCity_) {
     });
 }
 
-//
+//根据经纬坐标获取城市地址信息
 function fnGetCityName(ret_, currentCity_) {
-    map.getNameFromCoords({
+    map.getNameFromCoords({   
         lon: ret_.lon,
         lat: ret_.lat
     }, function(ret, err) {
@@ -193,6 +195,7 @@ function fnGetCityName(ret_, currentCity_) {
                         } else {
                             var cityText = $api.byId('cityText');
                             cityText.innerHTML = city;
+                            $api.setStorage('currentCity', city);
                         }
                     }else{
                         console.log($api.jsonToStr(err));
@@ -382,6 +385,7 @@ function fnOpenPersonalCenter() {
 	api.openWin({
         name: 'personalcenter',
         url: './personalcenter.html',
+        delay: 400,
         pageParam: {
             name: 'value'
         }

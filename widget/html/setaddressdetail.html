@@ -30,13 +30,39 @@
 
 <body>
     <header id="header">
-        <div class="back"></div>
+        <div class="back" tapmode onclick="api.closeWin();"></div>
     </header>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 apiready = function() {
+    fnOpenFrame();  //打开默认frame
 };
+
+//
+function fnOpenFrame() {
+    var header = $api.byId("header");  //使用id获取变量值
+    $api.fixStatusBar(header);  //状态栏自适应
+    var headerH = $api.offset(header).h;  //获取header的高度
+
+    api.openFrame({
+        name: 'setaddressdetail_frame',
+        url: './setaddressdetail_frame.html',
+        rect: {
+            x: 0,
+            y: headerH,
+            w: 'auto',
+            h: 'auto'
+        },
+        pageParam: {
+            name: 'test'
+        },
+        bounces: true,
+        bgColor: 'rgba(0,0,0,0)',
+        vScrollBarEnabled: true,
+        hScrollBarEnabled: true
+    });
+}
 </script>
 
 </html>

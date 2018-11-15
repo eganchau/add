@@ -191,7 +191,7 @@
             <div id="area" class="select" tapmode onclick="fnSelectArea();">点击选择收货所在的区域</div>
             <div class="arrow-right-highlight"></div>
         </div>
-        <div class="option">
+        <div class="option" tapmode onclick="fnOpenSetAddressDetailWin();">
             <div class="name">具体地址：</div>
             <div id="focus" class="select">点击选择具体的小区或写字楼</div>
             <div class="arrow-right-highlight"></div>
@@ -221,6 +221,7 @@
 apiready = function() {
 
 };
+
 function fnSelectArea() {
     var UIActionSelector = api.require('UIActionSelector');
     UIActionSelector.open({
@@ -278,6 +279,16 @@ function fnSelectArea() {
     });
 }
 
+//打开win
+function fnOpenSetAddressDetailWin() {
+    api.openWin({
+        name: 'setaddressdetail',
+        url: './setaddressdetail.html',
+        pageParam: {
+            name: 'test'
+        }
+    });
+}
 </script>
 
 </html>
