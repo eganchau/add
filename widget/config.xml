@@ -32,9 +32,9 @@
     	<param name="ios_api_key" value="MBNcIFmzHdOZWAy0VtzHTekfxjkelOl2" />
     </feature>
     <feature name="pushGeTui">
-        <param name="android_appkey" value="alr3VyFROo6jY86Uf5TSU3" />
-        <param name="android_appid" value="AjebD6b02hANwreAhJKgq9" />
-        <param name="android_appsecret" value="48b39efe0b35afce" />
+        <param name="android_appkey" value="4HP60lJLVaAtpqYtCvIeA3" />
+        <param name="android_appid" value="aLTHqLJjOx5XeRDoq7RIS1" />
+        <param name="android_appsecret" value="c610a8e813849998" />
     </feature>
     <access origin="*" />
 </widget>
