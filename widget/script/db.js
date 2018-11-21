@@ -28,7 +28,7 @@
         if (ret.status) {
             db.executeSqlSync({
                 name: dbName,
-                sql: 'CREATE TABLE ' + tableName + '(wareId VARCHAR(32), wareCount INT)'   
+                sql: 'CREATE TABLE ' + tableName + '(wareId VARCHAR(32), wareCount INT, warePrice REAL)'   
             });
         }
     }
@@ -47,20 +47,20 @@
     }
 
     // 更新操作，更新购物车中指定ID的商品数量
-    u.update = function(wareId_, wareCount_) {
+    u.update = function(wareId_, wareCount_, warePrice_) {
         u.init();
         return db.executeSqlSync({
             name: dbName,
-            sql: 'UPDATE ' + tableName + ' SET wareCount=' + wareCount_ + ' WHERE wareId=\"' + wareId_ + '\"'
+            sql: 'UPDATE ' + tableName + ' SET wareCount=' + wareCount_ +', warePrice=' + warePrice_ + ' WHERE wareId=\"' + wareId_ + '\"'
         });
     }
 
     // 插入操作，将商品ID和数量添加到购物车中
-    u.insert = function(wareId_, wareCount_) {
+    u.insert = function(wareId_, wareCount_, warePrice_) {
         u.init();
         return db.executeSqlSync({
             name: dbName,
-            sql: 'INSERT INTO ' + tableName + '(wareId,wareCount) VALUES(\"' + wareId_ + '\",' + wareCount_ + ')'    
+            sql: 'INSERT INTO ' + tableName + '(wareId,wareCount,warePrice) VALUES(\"' + wareId_ + '\",' + wareCount_ + ','+ warePrice_+ ')'    
         });
     }
 

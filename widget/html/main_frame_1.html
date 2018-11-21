@@ -262,7 +262,7 @@
             <div class="name">{{=value.commodity_name}}</div>
             <div class="description">{{=value.description}}</div>
             <div class="price-tag">
-                <span class="price">￥{{=value.price}}</span>
+                <span class="price" id="price_{{=value.id}}" p_="{{=value.price}}">￥{{=value.price}}</span>
                 <span class="unit">/{{=value.unit}}</span>
             </div>
             <div class="origin-price">超市:
@@ -291,17 +291,40 @@ apiready = function(){
     initRefresh();  //下拉刷新
     fnUpdateWareList(data);  //更新商品列表数据
     fnUpdateBanner();  //更新banner图
-    fnOpenShoppingCart();  //打开购物车
+    fnOpenShoppingCartFrame();  //打开购物车图标层frame
 };
 
+//打开购物车frame
+function fnOpenShoppingCartFrame() {
+    api.openFrame({
+        name: 'minicart_frame',
+        url: './minicart_frame.html',
+        rect: {
+            x: 0,
+            y: api.winHeight/2 + 200,
+            w: 100,
+            h: 80
+        },
+        pageParam: {
+            name: 'test'
+        },
+        bounces: true,
+        bgColor: 'rgba(0,0,0,0)',
+        vScrollBarEnabled: true,
+        hScrollBarEnabled: true
+    });
+}
 
 //
 function fnMinus(wareId_) {
     event.stopPropagation();  //阻止事件重叠（区域点击重叠）
     var count = $api.byId('count_' +  wareId_);
     var panel = $api.byId('panel_' +  wareId_);
+    var price_ = $api.byId('price_' + wareId_);
+    var price = $api.attr(price_, 'p_');   
+
     var countNumber = parseInt(count.innerHTML);
-    countNumber -= 1;
+    countNumber -= 1;  //加减图标值
     count.innerHTML = countNumber;
     //js简写： if 符合条件 则  panel.style.display = block 否则panel.style.display=none;
     panel.style.display = (countNumber > 0) ? 'block' : 'none';  
@@ -309,7 +332,8 @@ function fnMinus(wareId_) {
         name: 'updateShoppingCart',
         extra: {
             wareId: wareId_,   //两个值为数据库shoppingCart表的字段
-            wareCount: countNumber
+            wareCount: countNumber,
+            warePrice: price
         }
     }); 
 }
@@ -317,8 +341,10 @@ function fnAdd(wareId_) {
     event.stopPropagation();  //阻止事件重叠（区域点击重叠）
     var count = $api.byId('count_' +  wareId_);
     var panel = $api.byId('panel_' +  wareId_);
+    var price_ = $api.byId('price_' + wareId_);
+    var price = $api.attr(price_, 'p_');  //获取元素属性值
     var countNumber = parseInt(count.innerHTML);
-    countNumber += 1;
+    countNumber += 1;  //加减图标值
     count.innerHTML = countNumber;
     //js简写： if 符合条件 则  panel.style.display = block 否则panel.style.display=none;
     panel.style.display = (countNumber > 0) ? 'block' : 'none';     
@@ -326,39 +352,12 @@ function fnAdd(wareId_) {
         name: 'updateShoppingCart',
         extra: {
             wareId: wareId_,   //两个值为数据库shoppingCart表的字段
-            wareCount: countNumber
+            wareCount: countNumber,
+            warePrice: price
         }
     });
 }
 
-
-//打开购物车
-function fnOpenShoppingCart() {
-    api.openFrame({
-        name: 'minicart_frame',
-        url: './minicart_frame.html',
-        rect: {
-            x: 0,
-            y: api.winHeight/2 + 130,
-            w: 150,
-            h: 34
-        },
-        pageParam: {
-            name: 'test'
-        },
-        bounces: false,
-        bgColor: 'rgba(0,0,0,0)',
-        vScrollBarEnabled: false,  //垂直滚动条
-        hScrollBarEnabled: false   //更行滚动条
-    });
-    console.log('已打开购物车');
-
-    //把minicart_frame置顶；参数2不填写的话，会对所有的页面生效
-    api.bringFrameToFront({
-        from: 'minicart_frame',
-        to: 'main_frame_1'
-    });
-}
 
 //上拉
 function initListener() {

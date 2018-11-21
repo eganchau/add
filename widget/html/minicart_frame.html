@@ -62,18 +62,40 @@ apiready = function() {
 };
 
 function initEventListenner() {
+    //监听点击购物车
+    api.addEventListener({
+        name: 'tap'
+    }, function(ret, err){
+        fnOpenShoppingCartWin();
+    });
+    //监听购物车数据更新并写入数据库
     api.addEventListener({
         name: 'updateShoppingCart'
     }, function(ret, err){
         if( ret ){
+            //console.log($api.jsonToStr(ret));
             var result = $db.select(ret.value.wareId);  //根据id值查询数据库
             if (result && result.data.length >0) {    //库中已有记录
-                $db.update(ret.value.wareId, ret.value.wareCount);  //修改记录
+                $db.update(ret.value.wareId, ret.value.wareCount, ret.value.warePrice);  //修改记录
             } else {  //无记录
-                $db.insert(ret.value.wareId, ret.value.wareCount);  //插入记录
+                $db.insert(ret.value.wareId, ret.value.wareCount, ret.value.warePrice);  //插入记录
             }
         }else{
              alert( JSON.stringify( err ) );
+        }
+        getWareListFromeDB();
+    });
+
+
+}
+
+//打开购物车
+function fnOpenShoppingCartWin() {
+    api.openWin({
+        name: 'shoppingcart',
+        url: './shoppingcart.html',
+        pageParam: {
+            name: 'test'
         }
     });
 }
@@ -81,6 +103,18 @@ function initEventListenner() {
 function getWareListFromeDB() {
     var ret = $db.select();
     console.log($api.jsonToStr(ret));
+    var amountValue = 0;
+    var countValue= 0;
+    for (var i=0; i<ret.data.length; i++) {
+        var n = parseInt(ret.data[i].wareCount) * parseFloat(ret.data[i].warePrice);
+        var m = parseInt(ret.data[i].wareCount);
+        amountValue += n;
+        countValue += m;
+    }
+    var amount = $api.byId('amount');
+    var count = $api.byId('count'); 
+    amount.innerHTML = amountValue;
+    count.innerHTML = countValue;
 }
 </script>
 
